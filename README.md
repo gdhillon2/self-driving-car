@@ -1,29 +1,7 @@
-## CSC615 Group Term Project
+# CSC615-StartYourMotors
 
-### Drive On
+This is the first of a two part assignment. In this first part you will control a motor.  The motor should stop, go forward, backward, as well as speed control using Pulse Width Modulation.
 
-Have all your code in the respository along with videos (or links to videos)
+You will also use a Button, and the purpose of the button is to start your program.  So, you will run your program and it will wait until the button is pressed.  Once it is pressed, then you will show the motor running forward at 100% for at least 2 seconds, then slow down to 15% gradually, then stop the motor for at least one second, then start the motor slowly and gradually increase speed to max but in reverse (backwards).
 
-Team Report - PDF (also submitted to Canvas)
-
-Should have title page and each page should have your team name, date, and class in the header and page number in the footer.
-
-- List each team member, and Github Username of primary github with your full source and Makefile 
-- Task Description
-- Building the Robot (include photos)
-- Parts / Sensors Used (include photo, and part numbers where applicable, such as HC-SR04 for the sonic echo sensor)
-- How was bot built (photos good to include)
-- What libraries/software did you use in your code (include full reference)
-- Flowchart of your code
-- Pin Assignments you used
-- Hardware Diagram
-- What worked well
-- What were issues 
-
-Optional Appendix:
-
-- Listing of all your code
-- Makefile
-
-In addition to this will be the final running of your bot which will be recorded and an Individual submission about your team and experience.
-
+See the PDF in the repository here for more details.
