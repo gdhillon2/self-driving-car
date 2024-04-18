@@ -47,6 +47,8 @@ typedef struct {
   uint8_t motorhat; // might need this later
 } motor_info;
 
+// this function sets the speed of the motor connected to the specified pwm
+// channel
 void Run_Motor(uint8_t pwm, uint8_t forward, uint8_t backward,
                unsigned int direction, uint16_t speed) {
 
