@@ -5,7 +5,7 @@ CC = gcc
 CFLAGS = -Wall -D USE_BCM2835_LIB
 
 # Libraries
-LIBS = -lm -lbcm2835
+LIBS = -lm -lbcm2835 -lpthread
 
 # Source files
 SRCS = assignment3.c DEV_Config.c PCA9685.c gpioheader.c
