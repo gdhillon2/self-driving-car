@@ -12,8 +12,8 @@
  * stops for 1 second, and finally gradually builds up to 100%
  * power but in reverse.
  * **************************************************************/
-#include "DEV_Config.h"
-#include "PCA9685.h"
+#include "lib/Config/DEV_Config.h"
+#include "lib/PCA9685/PCA9685.h"
 #include "gpioheader.h"
 #include <pthread.h>
 #include <stdio.h>
@@ -121,7 +121,9 @@ int main() {
   motor_info motor_b_args = {BACKWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
 
   Run_Motor(&motor_b_args);
+  Run_Motor(&motor_a_args);
   sleep(2);
+  Run_Motor(&motor_a_args);
   Stop_Motor(&motor_b_args);
   DEV_ModuleExit();
 
