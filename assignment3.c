@@ -125,6 +125,7 @@ int main() {
   sleep(2);
   Run_Motor(&motor_a_args);
   Stop_Motor(&motor_b_args);
+  Stop_Motor(&motor_a_args);
   DEV_ModuleExit();
 
   return 0;
