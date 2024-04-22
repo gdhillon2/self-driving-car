@@ -2,15 +2,11 @@
  * Class:: CSC-615-01 Spring 2024
  * Name:: Gurvir Dhillon
  * Student ID:: 923067350
- * Github-Name:: gdhillonSFSU
- * Project:: Assignment 3 - Motors
- * File:: assignment3.c
+ * Github-Name::
+ * Project::
+ * File:: motors.c
  *
- * Description:: This program utilizes the WaveShare Motor Driver
- * Hat and Raspberry Pi to start a motor with a button. It runs
- * at 100% power for 2 seconds, slows down to 15% gradually, then
- * stops for 1 second, and finally gradually builds up to 100%
- * power but in reverse.
+ * Description::
  * **************************************************************/
 #include "lib/Config/DEV_Config.h"
 #include "lib/PCA9685/PCA9685.h"
@@ -78,16 +74,6 @@ void Stop_Motor(motor_info* motor) {
   printf("stopping pwm channel %d\n", motor->pwm);
 }
 
-// this function should run the motor for 2 seconds at max power, then exit the
-// function args contains a pointer to the motor_info struct
-void *threaded_motor(void *args) {
-  motor_info *motor = args;
-  Run_Motor(motor);
-  sleep(2);
-  Stop_Motor(motor);
-  return NULL;
-}
-
 int main() {
 
   if (DEV_ModuleInit())
@@ -113,12 +99,6 @@ int main() {
   //while (!get_pin_value(BUTTON_GPIO)) {
     // do nothing
   //}
-
-  // we can keep track of the motors by their index in this thread array
-  // (this will become slightly problematic with a second motorhat but
-  // we can always have another array for the second axle or figure
-  // something else out)
-  //pthread_t motor_threads[2];
 
   motor_info motor_a_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_1};
   motor_info motor_b_args = {BACKWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
