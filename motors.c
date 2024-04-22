@@ -29,9 +29,12 @@
 #define BIN1 PCA_CHANNEL_3
 #define BIN2 PCA_CHANNEL_4
 
+// macros for motor direction
 #define FORWARD 0
 #define BACKWARD 1
 
+// macros that define the address of each motor hat
+// each motor hat refers to an axle controlling 2 motors
 #define MOTORHAT_1 0x40
 #define MOTORHAT_2 0x51
 
@@ -100,7 +103,7 @@ int main() {
 
   // memory address is currently hardcoded but we have macros defined at the top
   // that hopefully work
-  PCA9685_Init(0x51);
+  PCA9685_Init(MOTORHAT_2);
   PCA9685_SetPWMFreq(100);
 
   printf("press the button to start the motor\n");
