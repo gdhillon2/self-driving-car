@@ -6,7 +6,7 @@ DIR_PCA9685 = ./lib/PCA9685
 OBJ_C = $(wildcard ${DIR_OBJ}/*.c gpioheader.c ${DIR_Config}/*.c ${DIR_PCA9685}/*.c )
 OBJ_O = $(patsubst %.c,${DIR_BIN}/%.o,$(notdir ${OBJ_C}))
 
-TARGET = assignment3
+TARGET = motors
 #BIN_TARGET = ${DIR_BIN}/${TARGET}
 
 CC = gcc
@@ -20,8 +20,8 @@ USELIB = USE_DEV_LIB
 DEBUG = -D $(USELIB) 
 LIB = -lm -lpigpio
 
-${TARGET}:${OBJ_O} ${DIR_BIN}/assignment3.o
-	$(CC) $(CFLAGS) $(OBJ_O) ${DIR_BIN}/assignment3.o -o $@ $(LIB)
+${TARGET}:${OBJ_O} ${DIR_BIN}/${TARGET}.o
+	$(CC) $(CFLAGS) $(OBJ_O) ${DIR_BIN}/${TARGET}.o -o $@ $(LIB)
 
 ${DIR_BIN}/%.o : %.c
 	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB) -I $(DIR_OBJ) -I $(DIR_Config) -I $(DIR_PCA9685)
@@ -40,5 +40,5 @@ ${DIR_BIN}/%.o : $(DIR_MotorDriver)/%.c
 
 
 clean :
-	rm $(DIR_BIN)/*.*
+	rm $(DIR_BIN)/*.o
 	rm $(TARGET)

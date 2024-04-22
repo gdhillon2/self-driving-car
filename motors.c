@@ -41,8 +41,8 @@ typedef struct {
   uint16_t speed; // stores what percentage of power we want to send via PWM
 
   uint8_t pwm;      // the PWM channel we are setting
-  uint8_t forward;  // pca channel that helps determine direction
-  uint8_t backward; // pca channel that helps determine direction
+  uint8_t IN1;  // pca channel that helps determine direction
+  uint8_t IN2; // pca channel that helps determine direction
 
   uint8_t motorhat; // might need this later
 } motor_info;
@@ -61,12 +61,12 @@ void Run_Motor(motor_info* motor) {
 
   if (motor->direction == FORWARD) {
     // printf("forward\n");
-    PCA9685_SetLevel(motor->forward, 0);
-    PCA9685_SetLevel(motor->backward, 1);
+    PCA9685_SetLevel(motor->IN1, 0);
+    PCA9685_SetLevel(motor->IN2, 1);
   } else {
     // printf("backward\n");
-    PCA9685_SetLevel(motor->forward, 1);
-    PCA9685_SetLevel(motor->backward, 0);
+    PCA9685_SetLevel(motor->IN1, 1);
+    PCA9685_SetLevel(motor->IN2, 0);
   }
 }
 
@@ -123,7 +123,6 @@ int main() {
   Run_Motor(&motor_b_args);
   Run_Motor(&motor_a_args);
   sleep(2);
-  Run_Motor(&motor_a_args);
   Stop_Motor(&motor_b_args);
   Stop_Motor(&motor_a_args);
   DEV_ModuleExit();
