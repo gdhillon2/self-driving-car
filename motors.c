@@ -15,9 +15,6 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define MOTOR_A 0
-#define MOTOR_B 1
-
 #define PWMA PCA_CHANNEL_0
 #define AIN1 PCA_CHANNEL_1
 #define AIN2 PCA_CHANNEL_2
@@ -45,6 +42,11 @@ typedef struct {
 
   uint8_t motorhat; // might need this later
 } motor_info;
+
+void initMotorhat(uint8_t motorhat){
+  PCA9685_Init(motorhat);
+  PCA9685_SetPWMFreq(100);
+}
 
 // this function sets the speed of the motor connected to the specified pwm
 // channel
@@ -79,14 +81,39 @@ void Stop_Motor(motor_info* motor) {
 }
 
 void testIndividualHat(uint8_t motorhat, motor_info* motor_a, motor_info* motor_b){
-  PCA9685_Init(motorhat);
-  PCA9685_SetPWMFreq(100);
+  initMotorhat(motorhat);
 
   Run_Motor(motor_a);
   Run_Motor(motor_b);
   sleep(2);
   Stop_Motor(motor_a);
   Stop_Motor(motor_b);
+  DEV_ModuleExit();
+}
+
+void testBothHats(motor_info* motor_a, motor_info* motor_b){
+  // init and begin running the motors on motorhat 1 (0x40)
+  initMotorhat(MOTORHAT_1);
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
+
+  // init and begin running the motors on motorhat 2 (0x51)
+  initMotorhat(MOTORHAT_2);
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
+
+  sleep(2);
+
+  // stop the motors on motorhat 2 (0x51)
+  Stop_Motor(motor_a);
+  Stop_Motor(motor_b);
+
+  // init and stop the motors on motorhat 1 (0x40)
+  initMotorhat(MOTORHAT_1);
+  Stop_Motor(motor_a);
+  Stop_Motor(motor_b);
+
+
   DEV_ModuleExit();
 }
 
@@ -102,11 +129,6 @@ int main() {
   // to PiGPIO library) are from gpioheader.h
   setup_io();
   set_gpio_input(BUTTON_GPIO);
-
-  // memory address is currently hardcoded but we have macros defined at the top
-  // that hopefully work
-  PCA9685_Init(MOTORHAT_2);
-  PCA9685_SetPWMFreq(100);
 
   //printf("press the button to start the motor\n");
 
@@ -124,6 +146,9 @@ int main() {
 
   // TESTING MOTOR HAT 0x40
   testIndividualHat(MOTORHAT_1, &motor_a_args, &motor_b_args);
+
+  // TESTING BOTH MOTOR HATS
+  testBothHats(&motor_a_args, &motor_b_args);
 
   return 0;
 }
