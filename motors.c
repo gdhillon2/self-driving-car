@@ -55,7 +55,11 @@ void Run_Motor(motor_info* motor) {
     motor->speed = 100;
   }
 
-  printf("pwm %d speed %d direction %d\n", motor->pwm, motor->speed, motor->direction);
+  printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
+  if(motor->direction == FORWARD)
+    printf("forward\n");
+  else
+    printf("backward\n");
   PCA9685_SetPwmDutyCycle(motor->pwm, motor->speed);
 
   if (motor->direction == FORWARD) {
@@ -72,6 +76,18 @@ void Run_Motor(motor_info* motor) {
 void Stop_Motor(motor_info* motor) {
   PCA9685_SetPwmDutyCycle(motor->pwm, 0);
   printf("stopping pwm channel %d\n", motor->pwm);
+}
+
+void testIndividualHat(uint8_t motorhat, motor_info* motor_a, motor_info* motor_b){
+  PCA9685_Init(motorhat);
+  PCA9685_SetPWMFreq(100);
+
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
+  sleep(2);
+  Stop_Motor(motor_a);
+  Stop_Motor(motor_b);
+  DEV_ModuleExit();
 }
 
 int main() {
@@ -92,7 +108,7 @@ int main() {
   PCA9685_Init(MOTORHAT_2);
   PCA9685_SetPWMFreq(100);
 
-  printf("press the button to start the motor\n");
+  //printf("press the button to start the motor\n");
 
   // continuously loop inside this while loop until button is pressed,
   // once button is pressed we begin threading
@@ -103,12 +119,11 @@ int main() {
   motor_info motor_a_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_1};
   motor_info motor_b_args = {BACKWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
 
-  Run_Motor(&motor_b_args);
-  Run_Motor(&motor_a_args);
-  sleep(2);
-  Stop_Motor(&motor_b_args);
-  Stop_Motor(&motor_a_args);
-  DEV_ModuleExit();
+  // TESTING MOTOR HAT 0x51
+  testIndividualHat(MOTORHAT_2, &motor_a_args, &motor_b_args);
+
+  // TESTING MOTOR HAT 0x40
+  testIndividualHat(MOTORHAT_1, &motor_a_args, &motor_b_args);
 
   return 0;
 }
