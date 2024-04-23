@@ -80,6 +80,14 @@ void Stop_Motor(motor_info *motor) {
   printf("stopping pwm channel %d\n", motor->pwm);
 }
 
+void Switch_Direction(motor_info *motor) {
+  if (motor->direction == FORWARD) {
+    motor->direction = BACKWARD;
+  } else {
+    motor->direction = FORWARD;
+  }
+}
+
 void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
                        motor_info *motor_b) {
   initMotorhat(motorhat);
@@ -87,6 +95,14 @@ void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
   Run_Motor(motor_a);
   Run_Motor(motor_b);
   sleep(2);
+
+  Switch_Direction(motor_a);
+  Switch_Direction(motor_b);
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
+
+  sleep(10);
+
   Stop_Motor(motor_a);
   Stop_Motor(motor_b);
   DEV_ModuleExit();
