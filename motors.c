@@ -8,9 +8,9 @@
  *
  * Description::
  * **************************************************************/
+#include "gpioheader.h"
 #include "lib/Config/DEV_Config.h"
 #include "lib/PCA9685/PCA9685.h"
-#include "gpioheader.h"
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -36,21 +36,21 @@ typedef struct {
       direction;  // this stores whether the wheel is going forward or backwards
   uint16_t speed; // stores what percentage of power we want to send via PWM
 
-  uint8_t pwm;      // the PWM channel we are setting
-  uint8_t IN1;  // pca channel that helps determine direction
+  uint8_t pwm; // the PWM channel we are setting
+  uint8_t IN1; // pca channel that helps determine direction
   uint8_t IN2; // pca channel that helps determine direction
 
   uint8_t motorhat; // might need this later
 } motor_info;
 
-void initMotorhat(uint8_t motorhat){
+void initMotorhat(uint8_t motorhat) {
   PCA9685_Init(motorhat);
   PCA9685_SetPWMFreq(100);
 }
 
 // this function sets the speed of the motor connected to the specified pwm
 // channel
-void Run_Motor(motor_info* motor) {
+void Run_Motor(motor_info *motor) {
 
   // 100 is max speed
   if (motor->speed > 100) {
@@ -58,7 +58,7 @@ void Run_Motor(motor_info* motor) {
   }
 
   printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
-  if(motor->direction == FORWARD)
+  if (motor->direction == FORWARD)
     printf("forward\n");
   else
     printf("backward\n");
@@ -75,12 +75,13 @@ void Run_Motor(motor_info* motor) {
   }
 }
 
-void Stop_Motor(motor_info* motor) {
+void Stop_Motor(motor_info *motor) {
   PCA9685_SetPwmDutyCycle(motor->pwm, 0);
   printf("stopping pwm channel %d\n", motor->pwm);
 }
 
-void testIndividualHat(uint8_t motorhat, motor_info* motor_a, motor_info* motor_b){
+void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
+                       motor_info *motor_b) {
   initMotorhat(motorhat);
 
   Run_Motor(motor_a);
@@ -91,7 +92,7 @@ void testIndividualHat(uint8_t motorhat, motor_info* motor_a, motor_info* motor_
   DEV_ModuleExit();
 }
 
-void testBothHats(motor_info* motor_a, motor_info* motor_b){
+void testBothHats(motor_info *motor_a, motor_info *motor_b) {
   // init and begin running the motors on motorhat 1 (0x40)
   initMotorhat(MOTORHAT_1);
   Run_Motor(motor_a);
@@ -113,7 +114,6 @@ void testBothHats(motor_info* motor_a, motor_info* motor_b){
   Stop_Motor(motor_a);
   Stop_Motor(motor_b);
 
-
   DEV_ModuleExit();
 }
 
@@ -122,21 +122,6 @@ int main() {
   if (DEV_ModuleInit())
     return 1;
   printf("dev config initialized\n");
-
-  int BUTTON_GPIO = 17;
-
-  // these functions (and the other gpio functions that sound similar
-  // to PiGPIO library) are from gpioheader.h
-  setup_io();
-  set_gpio_input(BUTTON_GPIO);
-
-  //printf("press the button to start the motor\n");
-
-  // continuously loop inside this while loop until button is pressed,
-  // once button is pressed we begin threading
-  //while (!get_pin_value(BUTTON_GPIO)) {
-    // do nothing
-  //}
 
   motor_info motor_a_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_1};
   motor_info motor_b_args = {BACKWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
