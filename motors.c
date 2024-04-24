@@ -46,6 +46,7 @@ typedef struct {
 void initMotorhat(uint8_t motorhat) {
   PCA9685_Init(motorhat);
   PCA9685_SetPWMFreq(100);
+  printf("Init Motor: %d\n", motorhat);
 }
 
 // this function sets the speed of the motor connected to the specified pwm
@@ -57,22 +58,19 @@ void Run_Motor(motor_info *motor) {
     motor->speed = 100;
   }
 
-  //printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
-  if (motor->direction == FORWARD)
-    //printf("forward\n");
-  else
-    //printf("backward\n");
+  printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
   PCA9685_SetPwmDutyCycle(motor->pwm, motor->speed);
 
   if (motor->direction == FORWARD) {
-    //printf("forward\n");
+    printf("forward\n");
     PCA9685_SetLevel(motor->IN1, 0);
     PCA9685_SetLevel(motor->IN2, 1);
   } else {
-    //printf("backward\n");
+    printf("backward\n");
     PCA9685_SetLevel(motor->IN1, 1);
     PCA9685_SetLevel(motor->IN2, 0);
   }
+  printf("Ran motor\n");
 }
 
 void Stop_Motor(motor_info *motor) {
@@ -81,7 +79,6 @@ void Stop_Motor(motor_info *motor) {
 }
 
 void Switch_Direction(motor_info *motor) {
-  printf("original direction: %d\n", motor->direction);
   if (motor->direction == FORWARD) {
     motor->direction = BACKWARD;
   } else if (motor->direction == BACKWARD) {
@@ -94,12 +91,6 @@ void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
                        motor_info *motor_b) {
   initMotorhat(motorhat);
 
-  Run_Motor(motor_a);
-  Run_Motor(motor_b);
-  sleep(2);
-
-  Switch_Direction(motor_a);
-  Switch_Direction(motor_b);
   Run_Motor(motor_a);
   Run_Motor(motor_b);
 
@@ -123,24 +114,6 @@ void testBothHats(motor_info *motor_a, motor_info *motor_b) {
 
   sleep(5);
 
-  Switch_Direction(motor_a);
-  Switch_Direction(motor_b);
-  
-  Run_Motor(motor_a);
-  Run_Motor(motor_b);
-
-  initMotorhat(MOTORHAT_1);
- 
-  Switch_Direction(motor_a); 
-  Switch_Direction(motor_b); 
-
-  Run_Motor(motor_a);
-  Run_Motor(motor_b);
-
-  sleep(5);
-
-  initMotorhat(MOTORHAT_2);
-
   // stop the motors on motorhat 2 (0x51)
   Stop_Motor(motor_a);
   Stop_Motor(motor_b);
@@ -150,7 +123,30 @@ void testBothHats(motor_info *motor_a, motor_info *motor_b) {
   Stop_Motor(motor_a);
   Stop_Motor(motor_b);
 
-  DEV_ModuleExit();
+  // both motors are stopped at this point
+
+  Switch_Direction(motor_a);
+  Switch_Direction(motor_b);
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
+
+ // motor hat 1 is running in the opposite direction at this point
+ 
+ initMotorhat(MOTORHAT_2);
+ 
+ Run_Motor(motor_a);
+ Run_Motor(motor_b);
+
+ sleep(5);
+
+ Stop_Motor(motor_a);
+ Stop_Motor(motor_b);
+
+ initMotorhat(MOTORHAT_1);
+ Stop_Motor(motor_a);
+ Stop_Motor(motor_b);
+
+ DEV_ModuleExit();
 }
 
 int main() {
@@ -160,13 +156,13 @@ int main() {
   printf("dev config initialized\n");
 
   motor_info motor_a_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_1};
-  motor_info motor_b_args = {BACKWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
+  motor_info motor_b_args = {FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
 
   // TESTING MOTOR HAT 0x51
-  //testIndividualHat(MOTORHAT_2, &motor_a_args, &motor_b_args);
+  // testIndividualHat(MOTORHAT_2, &motor_a_args, &motor_b_args);
 
   // TESTING MOTOR HAT 0x40
-  //testIndividualHat(MOTORHAT_1, &motor_a_args, &motor_b_args);
+  // testIndividualHat(MOTORHAT_1, &motor_a_args, &motor_b_args);
 
   // TESTING BOTH MOTOR HATS
   testBothHats(&motor_a_args, &motor_b_args);
