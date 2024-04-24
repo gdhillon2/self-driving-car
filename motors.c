@@ -91,10 +91,19 @@ void Set_Direction(motor_info *motor, unsigned int direction) {
   motor->direction = direction;
 }
 
-// void Shift_Left(motor_info *motor_a, motor_info motor_b, motor_info motor_c,
-// motor_info motor_d) {
-//
-// }
+void Shift_Left(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c,
+                motor_info *motor_d) {
+
+  Set_Direction(motor_a, BACKWARD);
+  Set_Direction(motor_a, FORWARD);
+  Set_Direction(motor_a, BACKWARD);
+  Set_Direction(motor_a, FORWARD);
+
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
+  Run_Motor(motor_c);
+  Run_Motor(motor_d);
+}
 
 void testIndividualMotor(motor_info *motor) {
 
@@ -191,9 +200,9 @@ int main() {
   // testBothHats(&motor_a_args, &motor_b_args);
 
   testIndividualMotor(&motor_a_args);
-//  testIndividualMotor(&motor_b_args);
-//  testIndividualMotor(&motor_c_args);
-//  testIndividualMotor(&motor_d_args);
-  
+  //  testIndividualMotor(&motor_b_args);
+  //  testIndividualMotor(&motor_c_args);
+  //  testIndividualMotor(&motor_d_args);
+
   return 0;
 }
