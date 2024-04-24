@@ -103,6 +103,7 @@ void testIndividualMotor(motor_info *motor) {
   sleep(4);
 
   Set_Direction(motor, BACKWARD);
+  Run_Motor(motor);
   sleep(4);
 
   Stop_Motor(motor);
@@ -190,8 +191,9 @@ int main() {
   // testBothHats(&motor_a_args, &motor_b_args);
 
   testIndividualMotor(&motor_a_args);
-  testIndividualMotor(&motor_b_args);
-  testIndividualMotor(&motor_c_args);
-  testIndividualMotor(&motor_d_args);
+//  testIndividualMotor(&motor_b_args);
+//  testIndividualMotor(&motor_c_args);
+//  testIndividualMotor(&motor_d_args);
+  
   return 0;
 }
