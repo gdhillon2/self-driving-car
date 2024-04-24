@@ -95,7 +95,7 @@ void Shift_Left(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c,
                 motor_info *motor_d) {
 
   Set_Direction(motor_a, BACKWARD);
-  Set_Direction(motor_b, FORWARD);
+  //Set_Direction(motor_b, FORWARD);
   Set_Direction(motor_c, BACKWARD);
   Set_Direction(motor_d, FORWARD);
 
