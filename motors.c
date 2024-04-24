@@ -46,7 +46,6 @@ typedef struct {
 void initMotorhat(uint8_t motorhat) {
   PCA9685_Init(motorhat);
   PCA9685_SetPWMFreq(100);
-  printf("Init Motor: %d\n", motorhat);
 }
 
 // this function sets the speed of the motor connected to the specified pwm
@@ -85,6 +84,17 @@ void Switch_Direction(motor_info *motor) {
     motor->direction = FORWARD;
   }
   printf("changed direction: %d\n", motor->direction);
+}
+
+void testIndividualMotor(motor_info *motor) {
+
+  initMotorhat(motor->motorhat);
+
+  Run_Motor(motor);
+
+  sleep(4);
+
+  Stop_Motor(motor);
 }
 
 void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
@@ -130,23 +140,23 @@ void testBothHats(motor_info *motor_a, motor_info *motor_b) {
   Run_Motor(motor_a);
   Run_Motor(motor_b);
 
- // motor hat 1 is running in the opposite direction at this point
- 
- initMotorhat(MOTORHAT_2);
- 
- Run_Motor(motor_a);
- Run_Motor(motor_b);
+  // motor hat 1 is running in the opposite direction at this point
 
- sleep(5);
+  initMotorhat(MOTORHAT_2);
 
- Stop_Motor(motor_a);
- Stop_Motor(motor_b);
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
 
- initMotorhat(MOTORHAT_1);
- Stop_Motor(motor_a);
- Stop_Motor(motor_b);
+  sleep(5);
 
- DEV_ModuleExit();
+  Stop_Motor(motor_a);
+  Stop_Motor(motor_b);
+
+  initMotorhat(MOTORHAT_1);
+  Stop_Motor(motor_a);
+  Stop_Motor(motor_b);
+
+  DEV_ModuleExit();
 }
 
 int main() {
@@ -157,7 +167,8 @@ int main() {
 
   motor_info motor_a_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_1};
   motor_info motor_b_args = {FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
-
+  motor_info motor_c_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_2};
+  motor_info motor_d_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_2};
   // TESTING MOTOR HAT 0x51
   // testIndividualHat(MOTORHAT_2, &motor_a_args, &motor_b_args);
 
@@ -165,7 +176,8 @@ int main() {
   // testIndividualHat(MOTORHAT_1, &motor_a_args, &motor_b_args);
 
   // TESTING BOTH MOTOR HATS
-  testBothHats(&motor_a_args, &motor_b_args);
+  // testBothHats(&motor_a_args, &motor_b_args);
 
+  testIndividualMotor(&motor_a_args);
   return 0;
 }
