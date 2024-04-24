@@ -51,7 +51,7 @@ void initMotorhat(uint8_t motorhat) {
 // this function sets the speed of the motor connected to the specified pwm
 // channel
 void Run_Motor(motor_info *motor) {
-
+  initMotorhat(motor->motorhat);
   // 100 is max speed
   if (motor->speed > 100) {
     motor->speed = 100;
@@ -73,6 +73,7 @@ void Run_Motor(motor_info *motor) {
 }
 
 void Stop_Motor(motor_info *motor) {
+  initMotorhat(motor->motorhat);
   PCA9685_SetPwmDutyCycle(motor->pwm, 0);
   printf("stopping pwm channel %d\n", motor->pwm);
 }
@@ -96,8 +97,6 @@ void Set_Direction(motor_info *motor, unsigned int direction) {
 // }
 
 void testIndividualMotor(motor_info *motor) {
-
-  initMotorhat(motor->motorhat);
 
   Run_Motor(motor);
 
@@ -180,7 +179,7 @@ int main() {
   motor_info motor_a_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_1};
   motor_info motor_b_args = {FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
   motor_info motor_c_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_2};
-  motor_info motor_d_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_2};
+  motor_info motor_d_args = {FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_2};
   // TESTING MOTOR HAT 0x51
   // testIndividualHat(MOTORHAT_2, &motor_a_args, &motor_b_args);
 
@@ -191,5 +190,8 @@ int main() {
   // testBothHats(&motor_a_args, &motor_b_args);
 
   testIndividualMotor(&motor_a_args);
+  testIndividualMotor(&motor_b_args);
+  testIndividualMotor(&motor_c_args);
+  testIndividualMotor(&motor_d_args);
   return 0;
 }
