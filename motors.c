@@ -86,12 +86,24 @@ void Switch_Direction(motor_info *motor) {
   printf("changed direction: %d\n", motor->direction);
 }
 
+void Set_Direction(motor_info *motor, unsigned int direction) {
+  motor->direction = direction;
+}
+
+// void Shift_Left(motor_info *motor_a, motor_info motor_b, motor_info motor_c,
+// motor_info motor_d) {
+//
+// }
+
 void testIndividualMotor(motor_info *motor) {
 
   initMotorhat(motor->motorhat);
 
   Run_Motor(motor);
 
+  sleep(4);
+
+  Set_Direction(motor, BACKWARD);
   sleep(4);
 
   Stop_Motor(motor);
