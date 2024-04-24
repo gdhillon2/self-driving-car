@@ -103,6 +103,9 @@ void Shift_Left(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c,
   Run_Motor(motor_b);
   Run_Motor(motor_c);
   Run_Motor(motor_d);
+
+  sleep(5); // Change later to dynamically stop the shift once object is not
+            // detected
 }
 
 void testIndividualMotor(motor_info *motor) {
@@ -116,6 +119,12 @@ void testIndividualMotor(motor_info *motor) {
   sleep(4);
 
   Stop_Motor(motor);
+}
+
+void testMotors(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c,
+                motor_info *motor_d) {
+
+  Shift_Left(motor_a, motor_b, motor_c, motor_d);
 }
 
 void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
@@ -199,10 +208,12 @@ int main() {
   // TESTING BOTH MOTOR HATS
   // testBothHats(&motor_a_args, &motor_b_args);
 
-  testIndividualMotor(&motor_a_args);
+  // testIndividualMotor(&motor_a_args);
   //  testIndividualMotor(&motor_b_args);
   //  testIndividualMotor(&motor_c_args);
   //  testIndividualMotor(&motor_d_args);
+
+  testMotors(&motor_a_args, &motor_b_args, &motor_c_args, &motor_d_args);
 
   return 0;
 }
