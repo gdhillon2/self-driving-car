@@ -57,19 +57,19 @@ void Run_Motor(motor_info *motor) {
     motor->speed = 100;
   }
 
-  printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
+  //printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
   if (motor->direction == FORWARD)
-    printf("forward\n");
+    //printf("forward\n");
   else
-    printf("backward\n");
+    //printf("backward\n");
   PCA9685_SetPwmDutyCycle(motor->pwm, motor->speed);
 
   if (motor->direction == FORWARD) {
-    // printf("forward\n");
+    //printf("forward\n");
     PCA9685_SetLevel(motor->IN1, 0);
     PCA9685_SetLevel(motor->IN2, 1);
   } else {
-    // printf("backward\n");
+    //printf("backward\n");
     PCA9685_SetLevel(motor->IN1, 1);
     PCA9685_SetLevel(motor->IN2, 0);
   }
@@ -81,11 +81,13 @@ void Stop_Motor(motor_info *motor) {
 }
 
 void Switch_Direction(motor_info *motor) {
+  printf("original direction: %d\n", motor->direction);
   if (motor->direction == FORWARD) {
     motor->direction = BACKWARD;
-  } else {
+  } else if (motor->direction == BACKWARD) {
     motor->direction = FORWARD;
   }
+  printf("changed direction: %d\n", motor->direction);
 }
 
 void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
@@ -101,7 +103,7 @@ void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
   Run_Motor(motor_a);
   Run_Motor(motor_b);
 
-  sleep(10);
+  sleep(5);
 
   Stop_Motor(motor_a);
   Stop_Motor(motor_b);
@@ -119,7 +121,25 @@ void testBothHats(motor_info *motor_a, motor_info *motor_b) {
   Run_Motor(motor_a);
   Run_Motor(motor_b);
 
-  sleep(2);
+  sleep(5);
+
+  Switch_Direction(motor_a);
+  Switch_Direction(motor_b);
+  
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
+
+  initMotorhat(MOTORHAT_1);
+ 
+  Switch_Direction(motor_a); 
+  Switch_Direction(motor_b); 
+
+  Run_Motor(motor_a);
+  Run_Motor(motor_b);
+
+  sleep(5);
+
+  initMotorhat(MOTORHAT_2);
 
   // stop the motors on motorhat 2 (0x51)
   Stop_Motor(motor_a);
@@ -143,10 +163,10 @@ int main() {
   motor_info motor_b_args = {BACKWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
 
   // TESTING MOTOR HAT 0x51
-  testIndividualHat(MOTORHAT_2, &motor_a_args, &motor_b_args);
+  //testIndividualHat(MOTORHAT_2, &motor_a_args, &motor_b_args);
 
   // TESTING MOTOR HAT 0x40
-  testIndividualHat(MOTORHAT_1, &motor_a_args, &motor_b_args);
+  //testIndividualHat(MOTORHAT_1, &motor_a_args, &motor_b_args);
 
   // TESTING BOTH MOTOR HATS
   testBothHats(&motor_a_args, &motor_b_args);
