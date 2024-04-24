@@ -125,6 +125,11 @@ void testMotors(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c,
                 motor_info *motor_d) {
 
   Shift_Left(motor_a, motor_b, motor_c, motor_d);
+
+  Stop_Motor(motor_a);
+  Stop_Motor(motor_b);
+  Stop_Motor(motor_c);
+  Stop_Motor(motor_d);
 }
 
 void testIndividualHat(uint8_t motorhat, motor_info *motor_a,
