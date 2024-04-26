@@ -2,11 +2,12 @@ DIR_OBJ = ./lib
 DIR_BIN = ./bin
 DIR_Config = ./lib/Config
 DIR_PCA9685 = ./lib/PCA9685
+DEPS = gpioheader.c MotorController.c MotorTest.c
 
-OBJ_C = $(wildcard ${DIR_OBJ}/*.c gpioheader.c ${DIR_Config}/*.c ${DIR_PCA9685}/*.c )
+OBJ_C = $(wildcard ${DIR_OBJ}/*.c ${DEPS} ${DIR_Config}/*.c ${DIR_PCA9685}/*.c )
 OBJ_O = $(patsubst %.c,${DIR_BIN}/%.o,$(notdir ${OBJ_C}))
 
-TARGET = motors
+TARGET = main
 #BIN_TARGET = ${DIR_BIN}/${TARGET}
 
 CC = gcc
