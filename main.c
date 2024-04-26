@@ -13,14 +13,14 @@ int main() {
     printf("Shifting motors left...\n");
     Shift_Left(&motor_a_args, &motor_b_args, &motor_c_args, &motor_d_args);
 
-    testIndividualMotor(&motor_a_args);
-
     // stop the motors
     printf("Stopping motors...\n");
     Stop_Motor(&motor_a_args);
     Stop_Motor(&motor_b_args);
     Stop_Motor(&motor_c_args);
     Stop_Motor(&motor_d_args);
+    
+    testIndividualMotor(&motor_a_args);
 
     return 0;
 }
