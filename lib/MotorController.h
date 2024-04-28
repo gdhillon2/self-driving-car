@@ -1,8 +1,8 @@
 #ifndef MOTOR_CONTROLLER_H
 #define MOTOR_CONTROLLER_H
 
+#include "PCA9685/PCA9685.h"
 #include <stdint.h>
-#include "lib/PCA9685/PCA9685.h"
 
 // macros for motor direction
 #define FORWARD 0
@@ -22,12 +22,13 @@
 
 // motor information structure
 typedef struct {
-    unsigned int direction; // this stores whether the wheel is going forward or backwards
-    uint16_t speed;         // stores what percentage of power we want to send via PWM
-    uint8_t pwm;            // the PWM channel we are setting
-    uint8_t IN1;            // pca channel that helps determine direction
-    uint8_t IN2;            // pca channel that helps determine direction
-    uint8_t motorhat;       // stores what motorhat the motor belongs to
+  unsigned int
+      direction;  // this stores whether the wheel is going forward or backwards
+  uint16_t speed; // stores what percentage of power we want to send via PWM
+  uint8_t pwm;    // the PWM channel we are setting
+  uint8_t IN1;    // pca channel that helps determine direction
+  uint8_t IN2;    // pca channel that helps determine direction
+  uint8_t motorhat; // stores what motorhat the motor belongs to
 } motor_info;
 
 // function prototypes
@@ -36,6 +37,7 @@ void Run_Motor(motor_info *motor);
 void Stop_Motor(motor_info *motor);
 void Switch_Direction(motor_info *motor);
 void Set_Direction(motor_info *motor, unsigned int direction);
-void Shift_Left(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c, motor_info *motor_d);
+void Shift_Left(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c,
+                motor_info *motor_d);
 
 #endif // MOTOR_CONTROLLER_H
