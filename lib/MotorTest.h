@@ -4,9 +4,8 @@
 #include "MotorController.h"
 
 // function prototypes
-void testIndividualMotor(motor_info *motor);
-void testMotors(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c, motor_info *motor_d);
-void testIndividualHat(uint8_t motorhat, motor_info *motor_a, motor_info *motor_b);
-void testBothHats(motor_info *motor_a, motor_info *motor_b);
-
+void Test_Individual_Motor(motor_info *motor);
+void Test_Turn_Right(motor_info *motor_array);
+void Test_Turn_Left(motor_info *motor_array);
+void Test_Shift_Left(motor_info *motor_array);
 #endif // MOTOR_TEST_H

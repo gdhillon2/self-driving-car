@@ -20,6 +20,14 @@
 #define MOTORHAT_1 0x40
 #define MOTORHAT_2 0x51
 
+// macros for the number of motors and which motor they are
+#define MOTOR_NUM 4
+
+#define MOTOR_A 0
+#define MOTOR_B 1
+#define MOTOR_C 2
+#define MOTOR_D 3
+
 // motor information structure
 typedef struct {
   unsigned int
@@ -33,11 +41,13 @@ typedef struct {
 
 // function prototypes
 void Init_Motorhat(uint8_t motorhat);
+void Init_Motor(motor_info *motor, unsigned int dir, uint16_t speed, uint8_t pwm, uint8_t IN1, uint8_t IN2, uint8_t motorhat);
 void Run_Motor(motor_info *motor);
 void Stop_Motor(motor_info *motor);
+void Stop_All_Motors(motor_info *motor_array);
 void Switch_Direction(motor_info *motor);
 void Set_Direction(motor_info *motor, unsigned int direction);
-void Shift_Left(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c,
-                motor_info *motor_d);
-
+void Shift_Left(motor_info *motor_array);
+void Turn_Right(motor_info *motor_array);
+void Turn_Left(motor_info *motor_array);
 #endif // MOTOR_CONTROLLER_H

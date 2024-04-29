@@ -8,6 +8,15 @@ void Init_Motorhat(uint8_t motorhat) {
     PCA9685_SetPWMFreq(100);
 }
 
+void Init_Motor(motor_info *motor, unsigned int dir, uint16_t speed, uint8_t pwm, uint8_t IN1, uint8_t IN2, uint8_t motorhat) {
+    motor->direction = dir;
+    motor->speed = speed;
+    motor->pwm = pwm;
+    motor->IN1 = IN1;
+    motor->IN2 = IN2;
+    motor->motorhat = motorhat;
+}
+
 void Run_Motor(motor_info *motor) {
     Init_Motorhat(motor->motorhat);
     // 100 is max speed
@@ -36,6 +45,12 @@ void Stop_Motor(motor_info *motor) {
     printf("stopping pwm channel %d\n", motor->pwm);
 }
 
+void Stop_All_Motors(motor_info *motor_array) {
+  for(int i = 0; i < MOTOR_NUM; i++) {
+    Stop_Motor(&motor_array[i]);
+  }
+}
+
 void Switch_Direction(motor_info *motor) {
     if (motor->direction == FORWARD) {
         motor->direction = BACKWARD;
@@ -49,17 +64,47 @@ void Set_Direction(motor_info *motor, unsigned int direction) {
     motor->direction = direction;
 }
 
-void Shift_Left(motor_info *motor_a, motor_info *motor_b, motor_info *motor_c, motor_info *motor_d) {
+void Shift_Left(motor_info *motor_array) {
 
-    Set_Direction(motor_a, BACKWARD);
-    // Set_Direction(motor_b, FORWARD);
-    Set_Direction(motor_c, BACKWARD);
-    Set_Direction(motor_d, FORWARD);
+    Set_Direction(&motor_array[MOTOR_A], BACKWARD);
+    Set_Direction(&motor_array[MOTOR_B], FORWARD);
+    Set_Direction(&motor_array[MOTOR_C], BACKWARD);
+    Set_Direction(&motor_array[MOTOR_D], FORWARD);
 
-    Run_Motor(motor_a);
-    Run_Motor(motor_b);
-    Run_Motor(motor_c);
-    Run_Motor(motor_d);
+    Run_Motor(&motor_array[MOTOR_A]);
+    Run_Motor(&motor_array[MOTOR_B]);
+    Run_Motor(&motor_array[MOTOR_C]);
+    Run_Motor(&motor_array[MOTOR_D]);
 
     sleep(5); // Change later to dynamically stop the shift once object is not detected
+}
+
+void Turn_Right(motor_info *motor_array){
+  
+  // sets direction of all motors to forward and sets power to 20% for motors b and c
+  for(int i = 0; i < MOTOR_NUM; i++) {
+    Set_Direction(&motor_array[i], FORWARD);
+
+    if(i == MOTOR_A || i == MOTOR_D)
+      (&motor_array[i])->speed = 100;
+    else
+      (&motor_array[i])->speed = 20;
+
+    Run_Motor(&motor_array[i]);
+  }
+}
+
+void Turn_Left(motor_info *motor_array){
+  
+  // sets direction of all motors to forward and sets power to 20% for motors a and d
+  for(int i = 0; i < MOTOR_NUM; i++) {
+    Set_Direction(&motor_array[i], FORWARD);
+
+    if(i == MOTOR_A || i == MOTOR_D)
+      (&motor_array[i])->speed = 20;
+    else
+      (&motor_array[i])->speed = 100;
+
+    Run_Motor(&motor_array[i]);
+  }
 }

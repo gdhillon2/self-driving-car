@@ -1,26 +1,37 @@
 #include "lib/MotorController.h"
 #include "lib/MotorTest.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
   // initialize the motor information structures
-  motor_info motor_a_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_1};
-  motor_info motor_b_args = {FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1};
-  motor_info motor_c_args = {FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_2};
-  motor_info motor_d_args = {FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_2};
+  motor_info* motors = malloc(sizeof(motor_info) * MOTOR_NUM);
+  
+  Init_Motor(&motors[MOTOR_A], FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_1);
+  Init_Motor(&motors[MOTOR_B], FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_1);
+  Init_Motor(&motors[MOTOR_C], FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_2);
+  Init_Motor(&motors[MOTOR_D], FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_2);
 
-  // shift the motors left
-  printf("Shifting motors left...\n");
-  Shift_Left(&motor_a_args, &motor_b_args, &motor_c_args, &motor_d_args);
+/*****************************************************
+*  MOTOR TEST FUNCTIONS BELOW - UNCOMMENT AS NEEDED
+*****************************************************/
 
-  // stop the motors
-  printf("Stopping motors...\n");
-  Stop_Motor(&motor_a_args);
-  Stop_Motor(&motor_b_args);
-  Stop_Motor(&motor_c_args);
-  Stop_Motor(&motor_d_args);
+//  Test_Individual_Motor(&motors[MOTOR_A]);
+//  Test_Individual_Motor(&motors[MOTOR_B]);
+//  Test_Individual_Motor(&motors[MOTOR_C]);
+//  Test_Individual_Motor(&motors[MOTOR_D]);
+//  Test_Turn_Right(motors);
+//  Test_Turn_Left(motors);
+  Test_Shift_Left(motors);
 
-  testIndividualMotor(&motor_a_args);
+/*****************************************************
+*  SENSOR TEST FUNCTIONS BELOW - UNCOMMENT AS NEEDED
+*****************************************************/
 
+
+
+
+
+  free(motors);  
   return 0;
 }
