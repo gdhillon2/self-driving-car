@@ -1,5 +1,5 @@
 #include "MotorController.h"
-#include "lib/PCA9685/PCA9685.h"
+#include "PCA9685/PCA9685.h"
 #include <stdio.h>
 #include <unistd.h>
 
