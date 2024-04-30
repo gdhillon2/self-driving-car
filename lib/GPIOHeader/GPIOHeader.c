@@ -2,9 +2,9 @@
  * Class:: CSC-615-01 Spring 2024
  * Name:: Gurvir Dhillon
  * Student ID:: 923067350
- * Github-Name:: gdhillon2
- * Project:: Assignment 1 - Traffic Light
- * File:: gpioheader.c
+ * Github-Name:: gdhillonSFSU
+ * Project::
+ * File:: GPIOHeader.c
  *
  * Description:: This is the source file for a personal library that
  * utilizes direct register access to manipulate the GPIO pins.
@@ -17,7 +17,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
-#include "gpioheader.h"
+#include "GPIOHeader.h"
 
 #define PAGE_SIZE (4 * 1024)
 #define BLOCK_SIZE (4 * 1024)
@@ -80,7 +80,7 @@ void set_gpio_output(int pin)
 {
    INP_GPIO(pin);
    OUT_GPIO(pin);
-   printf("setting pin %d to output\n", pin);
+   // printf("setting pin %d to output\n", pin);
    return;
 }
 
@@ -88,7 +88,7 @@ void set_gpio_output(int pin)
 void set_gpio_input(int pin)
 {
    INP_GPIO(pin);
-   printf("setting pin %d to input\n", pin);
+   // printf("setting pin %d to input\n", pin);
    return;
 }
 
@@ -96,7 +96,7 @@ void set_gpio_input(int pin)
 void set_pin_high(int pin)
 {
    GPIO_SET = 1 << pin;
-   printf("setting pin %d to high\n", pin);
+   // printf("setting pin %d to high\n", pin);
    return;
 }
 
@@ -104,7 +104,7 @@ void set_pin_high(int pin)
 void set_pin_low(int pin)
 {
    GPIO_CLR = 1 << pin;
-   printf("setting pin %d to low\n", pin);
+   // printf("setting pin %d to low\n", pin);
    return;
 }
 

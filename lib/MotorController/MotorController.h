@@ -1,7 +1,7 @@
 #ifndef MOTOR_CONTROLLER_H
 #define MOTOR_CONTROLLER_H
 
-#include "PCA9685/PCA9685.h"
+#include "../PCA9685/PCA9685.h"
 #include <stdint.h>
 
 // macros for motor direction

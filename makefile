@@ -2,9 +2,12 @@ DIR_OBJ = ./lib
 DIR_BIN = ./bin
 DIR_Config = ./lib/Config
 DIR_PCA9685 = ./lib/PCA9685
-DEPS = gpioheader.c MotorController.c MotorTest.c
+DIR_MotorController = ./lib/MotorController
+DIR_MotorTest = ./lib/MotorTest
+DIR_GPIOHeader = ./lib/GPIOHeader
+DIR_SensorController = ./lib/SensorController
 
-OBJ_C = $(wildcard ${DIR_OBJ}/*.c ${DEPS} ${DIR_Config}/*.c ${DIR_PCA9685}/*.c )
+OBJ_C = $(wildcard ${DIR_OBJ}/*.c ${DIR_Config}/*.c ${DIR_PCA9685}/*.c ${DIR_MotorController}/*.c ${DIR_MotorTest}/*.c ${DIR_GPIOHeader}/*.c ${DIR_SensorController}/*.c)
 OBJ_O = $(patsubst %.c,${DIR_BIN}/%.o,$(notdir ${OBJ_C}))
 
 TARGET = main
@@ -36,9 +39,17 @@ ${DIR_BIN}/%.o : $(DIR_Config)/%.c
 ${DIR_BIN}/%.o : $(DIR_PCA9685)/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB) -I $(DIR_Config)
 
-${DIR_BIN}/%.o : $(DIR_MotorDriver)/%.c
+${DIR_BIN}/%.o : $(DIR_MotorController)/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB) -I $(DIR_Config) -I $(DIR_PCA9685)
 
+${DIR_BIN}/%.o : $(DIR_MotorTest)/%.c
+	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB) -I $(DIR_Config) -I $(DIR_PCA9685)
+
+${DIR_BIN}/%.o : $(DIR_GPIOHeader)/%.c
+	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB) -I $(DIR_Config) -I $(DIR_PCA9685)
+
+${DIR_BIN}/%.o : $(DIR_SensorController)/%.c
+	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB) -I $(DIR_Config) -I $(DIR_PCA9685)
 
 clean :
 	rm $(DIR_BIN)/*.o

@@ -1,7 +1,7 @@
 #ifndef MOTOR_TEST_H
 #define MOTOR_TEST_H
 
-#include "MotorController.h"
+#include "../MotorController/MotorController.h"
 
 // function prototypes
 void Test_Individual_Motor(motor_info *motor);

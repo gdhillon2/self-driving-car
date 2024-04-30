@@ -2,9 +2,9 @@
  * Class:: CSC-615-01 Spring 2024
  * Name:: Gurvir Dhillon
  * Student ID:: 923067350
- * Github-Name:: gdhillon2
- * Project:: Assignment 1 - Traffic Light
- * File:: gpioheader.h
+ * Github-Name:: gdhillonSFSU
+ * Project::
+ * File:: GPIOHeader.h
  *
  * Description:: This is a header file for a personal library that
  * utilizes direct register access to manipulate the GPIO pins.

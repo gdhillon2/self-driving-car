@@ -1,5 +1,5 @@
-#include "lib/MotorController.h"
-#include "lib/MotorTest.h"
+#include "lib/MotorController/MotorController.h"
+#include "lib/MotorTest/MotorTest.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,9 +20,9 @@ int main() {
 //  Test_Individual_Motor(&motors[MOTOR_B]);
 //  Test_Individual_Motor(&motors[MOTOR_C]);
 //  Test_Individual_Motor(&motors[MOTOR_D]);
-//  Test_Turn_Right(motors);
-//  Test_Turn_Left(motors);
-  Test_Shift_Left(motors);
+  Test_Turn_Right(motors);
+  Test_Turn_Left(motors);
+//  Test_Shift_Left(motors);
 
 /*****************************************************
 *  SENSOR TEST FUNCTIONS BELOW - UNCOMMENT AS NEEDED
