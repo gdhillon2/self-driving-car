@@ -1,6 +1,8 @@
 #ifndef SENSOR_CONTROLLER_H
 #define SENSOR_CONTROLLER_H
 
+#include "../../main.h"
+
 #define RIGHT_SENSOR 0
 #define LEFT_SENSOR 1
 
@@ -14,4 +16,5 @@ typedef struct {
 sensor_info *Init_Sensors();
 void Free_Sensors();
 void *Read_Sensors(void *args);
-#endif //SENSOR_CONTROLLER_H
+void Running_Test();
+#endif // SENSOR_CONTROLLER_H

@@ -1,9 +1,16 @@
 #include "main.h"
 #include "lib/MotorController/MotorController.h"
+#include "lib/MotorTest/MotorTest.h"
+#include "lib/SensorController/SensorController.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+volatile int running = 1;
+
 // when the user presses ctrl + c, the threads
 // fall out of their while loops and the program
 // terminates
-void sigintHandler(int sig) {
+void sigintHandler() {
   running = 0;
   printf("\nshutting down\n");
 }
@@ -42,10 +49,11 @@ int main() {
   }
 
   Stop_All_Motors(motors);
-
   /*****************************************************
    *  SENSOR TEST FUNCTIONS BELOW - UNCOMMENT AS NEEDED
    *****************************************************/
+  Running_Test(); // this function tests whether the running variable properly
+                  // updates in another file when the signal handler is called
 
   free(motors);
   return 0;

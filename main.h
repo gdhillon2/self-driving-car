@@ -1,7 +1,4 @@
-#include "lib/MotorController/MotorController.h"
-#include "lib/MotorTest/MotorTest.h"
-#include "lib/SensorController/SensorController.h"
-#include <stdio.h>
-#include <stdlib.h>
-
+#ifndef MAIN_H
+#define MAIN_H
 extern volatile int running;
+#endif // MAIN_H

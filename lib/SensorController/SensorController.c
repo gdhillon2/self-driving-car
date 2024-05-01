@@ -50,3 +50,10 @@ void *Read_Sensor(void *arg) {
   sensor_args->sensor_value = get_pin_value(sensor_args->gpio_pin);
   return NULL;
 }
+
+void Running_Test() {
+  while (running) {
+    printf("running\n");
+    sleep(1);
+  }
+}
