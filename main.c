@@ -10,10 +10,7 @@ volatile int running = 1;
 // when the user presses ctrl + c, the threads
 // fall out of their while loops and the program
 // terminates
-void sigintHandler() {
-  running = 0;
-  printf("\nshutting down\n");
-}
+void sigintHandler() { running = 0; }
 
 int main() {
   signal(SIGINT, sigintHandler);
@@ -41,20 +38,20 @@ int main() {
   /*****************************************************
    *  TESTS SIGNAL HANDLER
    *****************************************************/
-  for (int i = 0; i < MOTOR_NUM; i++) {
-    Run_Motor(&motors[i]);
-  }
-  while (running) {
-    // do nothing
-  }
-
-  Stop_All_Motors(motors);
+  //  for (int i = 0; i < MOTOR_NUM; i++) {
+  //    Run_Motor(&motors[i]);
+  //  }
+  //  while (running) {
+  //    // do nothing
+  //  }
+  //
+  //  Stop_All_Motors(motors);
   /*****************************************************
    *  SENSOR TEST FUNCTIONS BELOW - UNCOMMENT AS NEEDED
    *****************************************************/
   Running_Test(); // this function tests whether the running variable properly
                   // updates in another file when the signal handler is called
-
+  printf("shutting down\n");
   free(motors);
   return 0;
 }
