@@ -1,5 +1,16 @@
 #include "main.h"
+#include "lib/MotorController/MotorController.h"
+// when the user presses ctrl + c, the threads
+// fall out of their while loops and the program
+// terminates
+void sigintHandler(int sig) {
+  running = 0;
+  printf("\nshutting down\n");
+}
+
 int main() {
+  signal(SIGINT, sigintHandler);
+  printf("press ctrl+c to shut down\n");
   // initialize the motor information structures
   motor_info *motors = malloc(sizeof(motor_info) * MOTOR_NUM);
 
@@ -16,9 +27,21 @@ int main() {
   //  Test_Individual_Motor(&motors[MOTOR_B]);
   //  Test_Individual_Motor(&motors[MOTOR_C]);
   //  Test_Individual_Motor(&motors[MOTOR_D]);
-  Test_Turn_Right(motors);
-  Test_Turn_Left(motors);
+  //  Test_Turn_Right(motors);
+  //  Test_Turn_Left(motors);
   //  Test_Shift_Left(motors);
+
+  /*****************************************************
+   *  TESTS SIGNAL HANDLER
+   *****************************************************/
+  for (int i = 0; i < MOTOR_NUM; i++) {
+    Run_Motor(&motors[i]);
+  }
+  while (running) {
+    // do nothing
+  }
+
+  Stop_All_Motors(motors);
 
   /*****************************************************
    *  SENSOR TEST FUNCTIONS BELOW - UNCOMMENT AS NEEDED
