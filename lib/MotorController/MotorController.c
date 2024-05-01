@@ -39,6 +39,21 @@ void Run_Motor(motor_info *motor) {
   printf("Ran motor\n");
 }
 
+void Move_All_Forward(motor_info *motor_array) {
+  for(int i = 0; i < MOTOR_NUM; i++) {
+    (&motor_array[i])->speed = 100;
+    Set_Direction(&motor_array[i], FORWARD);
+    Run_Motor(&motor_array[i]);
+  }
+}
+
+void Move_All_Backward(motor_info *motor_array) {
+  for(int i = 0; i < MOTOR_NUM; i++) {
+    (&motor_array[i])->speed = 100;
+    Set_Direction(&motor_array[i], BACKWARD);
+    Run_Motor(&motor_array[i]);
+  }
+}
 void Stop_Motor(motor_info *motor) {
   Init_Motorhat(motor->motorhat);
   PCA9685_SetPwmDutyCycle(motor->pwm, 0);
@@ -75,9 +90,6 @@ void Shift_Left(motor_info *motor_array) {
   Run_Motor(&motor_array[MOTOR_B]);
   Run_Motor(&motor_array[MOTOR_C]);
   Run_Motor(&motor_array[MOTOR_D]);
-
-  sleep(5); // Change later to dynamically stop the shift once object is not
-            // detected
 }
 
 void Shift_Right(motor_info *motor_array) {
@@ -91,9 +103,6 @@ void Shift_Right(motor_info *motor_array) {
   Run_Motor(&motor_array[MOTOR_B]);
   Run_Motor(&motor_array[MOTOR_C]);
   Run_Motor(&motor_array[MOTOR_D]);
-
-  sleep(5); // Change later to dynamically stop the shift once object is not
-            // detected
 }
 
 void Turn_Right(motor_info *motor_array) {
@@ -106,7 +115,7 @@ void Turn_Right(motor_info *motor_array) {
     if (i == MOTOR_A || i == MOTOR_D)
       (&motor_array[i])->speed = 100;
     else
-      (&motor_array[i])->speed = 20;
+      (&motor_array[i])->speed = 0;
 
     Run_Motor(&motor_array[i]);
   }
@@ -120,7 +129,7 @@ void Turn_Left(motor_info *motor_array) {
     Set_Direction(&motor_array[i], FORWARD);
 
     if (i == MOTOR_A || i == MOTOR_D)
-      (&motor_array[i])->speed = 20;
+      (&motor_array[i])->speed = 0;
     else
       (&motor_array[i])->speed = 100;
 

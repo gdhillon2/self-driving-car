@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <pigpio.h>
 
 #define RIGHT_LINE_SENSOR_GPIO 17
 #define LEFT_LINE_SENSOR_GPIO 27
@@ -26,30 +27,35 @@
  * CALLER IS RESPONSIBLE FOR FREEING THE RETURNED PTR
  ***************************************************/
 sensor_info *Init_Sensors() {
-  setup_io();
-  set_gpio_input(RIGHT_LINE_SENSOR_GPIO);
-  set_gpio_input(LEFT_LINE_SENSOR_GPIO);
+  gpioInitialise();
+  gpioSetMode(RIGHT_LINE_SENSOR_GPIO, PI_INPUT);
+  gpioSetMode(LEFT_LINE_SENSOR_GPIO, PI_INPUT);
 
   // initialize the structs used for the 2 sensors
   // TODO: NEED TO INITIALIZE THE TWO IR STRUCTS AS WELL
   sensor_info *sensor_array = malloc(sizeof(sensor_info) * 2);
 
   sensor_array[RIGHT_LINE_SENSOR].gpio_pin = RIGHT_LINE_SENSOR_GPIO;
-  sensor_array[RIGHT_LINE_SENSOR].sensor_value = -1;
+  sensor_array[RIGHT_LINE_SENSOR].sensor_value = 0;
 
   sensor_array[LEFT_LINE_SENSOR].gpio_pin = LEFT_LINE_SENSOR_GPIO;
-  sensor_array[LEFT_LINE_SENSOR].sensor_value = -1;
+  sensor_array[LEFT_LINE_SENSOR].sensor_value = 0;
 
   return sensor_array;
 }
 
-void Free_Sensors(sensor_info *sensor_array) { free(sensor_array); }
+void Free_Sensors(sensor_info *sensor_array) {
+  gpioTerminate();
+  free(sensor_array); 
+}
 
 // the threaded function: reads the gpio pin of the corresponding sensor
 // and writes value to gpio_pin member
 void *Read_Sensor(void *arg) {
   sensor_info *sensor_args = arg;
-  sensor_args->sensor_value = get_pin_value(sensor_args->gpio_pin);
+  while(running) {
+    sensor_args->sensor_value = gpioRead(sensor_args->gpio_pin);
+  }
   return NULL;
 }
 

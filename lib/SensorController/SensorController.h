@@ -8,6 +8,8 @@
 #define FRONT_IR_SENSOR 2
 #define SIDE_IR_SENSOR 3
 
+#define SENSOR_NUM 2 // TODO CHANGE THIS TO 4 WHEN IR SENSORS ARE IMPLEMENTED
+
 // struct to be passed to the thread that contains
 // gpio pin and sensor value
 typedef struct {
@@ -17,6 +19,6 @@ typedef struct {
 
 sensor_info *Init_Sensors();
 void Free_Sensors(sensor_info *sensor_array);
-void *Read_Sensors(void *args);
+void *Read_Sensor(void *args);
 void Running_Test();
 #endif // SENSOR_CONTROLLER_H
