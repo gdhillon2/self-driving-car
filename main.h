@@ -1,4 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
-extern volatile int running;
+
+#include <signal.h>
+
+extern volatile sig_atomic_t running;
 #endif // MAIN_H

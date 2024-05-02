@@ -9,7 +9,7 @@
 #include "lib/GPIOHeader/GPIOHeader.h"
 #include <pigpio.h>
 
-volatile int running = 1;
+volatile sig_atomic_t running = 1;
 
 // when the user presses ctrl + c, the threads
 // fall out of their while loops and the program

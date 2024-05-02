@@ -37,6 +37,7 @@ void Run_Motor(motor_info *motor) {
     PCA9685_SetLevel(motor->IN2, 0);
   }
   printf("Ran motor\n");
+  DEV_ModuleExit();
 }
 
 void Move_All_Forward(motor_info *motor_array) {
@@ -58,6 +59,7 @@ void Stop_Motor(motor_info *motor) {
   Init_Motorhat(motor->motorhat);
   PCA9685_SetPwmDutyCycle(motor->pwm, 0);
   printf("stopping pwm channel %d\n", motor->pwm);
+  DEV_ModuleExit();
 }
 
 void Stop_All_Motors(motor_info *motor_array) {
