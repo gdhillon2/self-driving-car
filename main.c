@@ -2,12 +2,11 @@
 #include "lib/MotorController/MotorController.h"
 #include "lib/MotorTest/MotorTest.h"
 #include "lib/SensorController/SensorController.h"
+#include <pigpio.h>
+#include <pthread.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
-#include <pthread.h>
-#include "lib/GPIOHeader/GPIOHeader.h"
-#include <pigpio.h>
 
 volatile sig_atomic_t running = 1;
 
@@ -26,60 +25,74 @@ int main() {
   Init_Motor(&motors[MOTOR_C], FORWARD, 100, PWMA, AIN1, AIN2, MOTORHAT_2);
   Init_Motor(&motors[MOTOR_D], FORWARD, 100, PWMB, BIN1, BIN2, MOTORHAT_2);
 
-  /*****************************************************
-   *  MOTOR TEST FUNCTIONS BELOW - UNCOMMENT AS NEEDED
-   *****************************************************/
-//    for (int i = 0; i < MOTOR_NUM; i++) {
-//      Run_Motor(&motors[i]);
-//    }
-////    sleep(5);
-////    Shift_Left(motors);
-////    sleep(5);
-////    Shift_Right(motors);
-////    sleep(5);
-//    while (running) {
-//      // do nothing
-//    }
-//
-//    Stop_All_Motors(motors);
-  /*****************************************************
-   *  SENSOR TEST FUNCTIONS BELOW - UNCOMMENT AS NEEDED
-   *****************************************************/
-//  Running_Test(); // this function tests whether the running variable properly
-                  // updates in another file when the signal handler is called
+  // initialize the sensor structs
+  // sensors is an ARRAY of sensor_info structs with a length of SENSOR_NUM
+  // SENSOR_NUM is a macro in SensorController.h that equals the total number of
+  // sensors on the car
+  // SensorController.h has macros for each index that specify which sensor that
+  // index belongs to
+  // RIGHT_LINE_SENSOR = 0, LEFT_LINE_SENSOR = 1,
+  // FRONT_IR_SENSOR = 2, SIDE_IR_SENSOR = 3
   sensor_info *sensors = Init_Sensors();
 
-//  while(running) {
-//  sensors[RIGHT_LINE_SENSOR].sensor_value = gpioRead(17);
-//  printf("right line sensor\t%d\n", sensors[RIGHT_LINE_SENSOR].sensor_value);
-//  sleep(1);
-//  }
-
+  // initialize the threads for each sensor
+  // this is initialized as an array because SensorController.h has macros for
+  // the indices
+  // please refer to the comment above or SensorController.h for the indices
   pthread_t threads[SENSOR_NUM];
 
-  // creates the IR and LINE threads and sends them the necessary structs
-  if(pthread_create(&threads[RIGHT_LINE_SENSOR], NULL, Read_Sensor, (void *)&sensors[RIGHT_LINE_SENSOR])){
+  // creates the LINE sensor threads and sends them the necessary structs
+  if (pthread_create(&threads[RIGHT_LINE_SENSOR], NULL, Read_Sensor,
+                     (void *)&sensors[RIGHT_LINE_SENSOR])) {
     printf("failed to create right line sensor thread\n");
     Free_Sensors(sensors);
     return 1;
   }
 
-  if(pthread_create(&threads[LEFT_LINE_SENSOR], NULL, Read_Sensor, (void *)&sensors[LEFT_LINE_SENSOR])){
+  if (pthread_create(&threads[LEFT_LINE_SENSOR], NULL, Read_Sensor,
+                     (void *)&sensors[LEFT_LINE_SENSOR])) {
     printf("failed to create left line sensor thread\n");
     Free_Sensors(sensors);
     return 1;
   }
 
+  // TODO: ADD 2 MORE THREADS FOR IR SENSORS
+  // NOTE: YOU WILL NEED TO CHANGE SENSOR_NUM FROM 2 TO 4, THEN YOU SHOULD BE
+  // ABLE TO JUST UNCOMMENT THIS CODE (IT IS NOT TESTED SO PLEASE VERIFY THAT IT
+  // IS CORRECT)
+
+  // creates the IR sensor threads and sends them the necessary structs
+  //  if (pthread_create(&threads[FRONT_IR_SENSOR], NULL, Read_Sensor,
+  //                     (void *)&sensors[FRONT_IR_SENSOR])) {
+  //    printf("failed to create front IR sensor thread\n");
+  //    Free_Sensors(sensors);
+  //    return 1;
+  //  }
+  //
+  //  if (pthread_create(&threads[SIDE_IR_SENSOR], NULL, Read_Sensor,
+  //                     (void *)&sensors[SIDE_IR_SENSOR])) {
+  //    printf("failed to create side IR sensor thread\n");
+  //    Free_Sensors(sensors);
+  //    return 1;
+  //  }
+
   signal(SIGINT, sigintHandler);
 
-  while(running) {
-    //printf("Right sensor: %d\tLeft sensor: %d\n", sensors[RIGHT_LINE_SENSOR].sensor_value, sensors[LEFT_LINE_SENSOR].sensor_value);
-    if(sensors[LEFT_LINE_SENSOR].sensor_value && sensors[RIGHT_LINE_SENSOR].sensor_value){
-      printf("\n**************************************BOTH SENSORS TRIPPED**************************************\n");
+  while (running) {
+    // TODO: IMPLEMENT OBSTACLE AVOIDANCE HERE (IT SHOULD TAKE PRIORITY OVER
+    // LINE DETECTION)
+
+    // printf("Right sensor: %d\tLeft sensor: %d\n",
+    // sensors[RIGHT_LINE_SENSOR].sensor_value,
+    // sensors[LEFT_LINE_SENSOR].sensor_value);
+    if (sensors[LEFT_LINE_SENSOR].sensor_value &&
+        sensors[RIGHT_LINE_SENSOR].sensor_value) {
+      printf("\n**************************************BOTH SENSORS "
+             "TRIPPED**************************************\n");
     }
 
-    while(sensors[LEFT_LINE_SENSOR].sensor_value) {
-      usleep(TURN_DELAY);
+    while (sensors[LEFT_LINE_SENSOR].sensor_value &&
+           !sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
     }
 
@@ -91,13 +104,13 @@ int main() {
     Move_All_Forward(motors);
   }
 
-  if(pthread_join(threads[RIGHT_LINE_SENSOR], NULL)) {
+  if (pthread_join(threads[RIGHT_LINE_SENSOR], NULL)) {
     printf("failed to join right line sensor\n");
     Free_Sensors(sensors);
     return 1;
   }
-  
-  if(pthread_join(threads[LEFT_LINE_SENSOR], NULL)) {
+
+  if (pthread_join(threads[LEFT_LINE_SENSOR], NULL)) {
     printf("failed to join left line sensor\n");
     Free_Sensors(sensors);
     return 1;
