@@ -91,8 +91,8 @@ int main() {
              "TRIPPED**************************************\n");
     }
 
-    while (sensors[LEFT_LINE_SENSOR].sensor_value &&
-           !sensors[RIGHT_LINE_SENSOR].sensor_value) {
+    while (sensors[LEFT_LINE_SENSOR].sensor_value) {
+      usleep(TURN_DELAY);
       Turn_Left(motors);
     }
 
