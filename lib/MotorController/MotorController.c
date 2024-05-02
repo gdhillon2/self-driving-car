@@ -114,9 +114,10 @@ void Turn_Right(motor_info *motor_array) {
 
     if (i == MOTOR_A || i == MOTOR_D)
       (&motor_array[i])->speed = 100;
-    else
-      (&motor_array[i])->speed = 0;
-
+    else {
+      Set_Direction(&motor_array[i], BACKWARD);
+      (&motor_array[i])->speed = 100;
+    }
     Run_Motor(&motor_array[i]);
   }
 }
@@ -128,11 +129,12 @@ void Turn_Left(motor_info *motor_array) {
   for (int i = 0; i < MOTOR_NUM; i++) {
     Set_Direction(&motor_array[i], FORWARD);
 
-    if (i == MOTOR_A || i == MOTOR_D)
-      (&motor_array[i])->speed = 0;
+    if (i == MOTOR_A || i == MOTOR_D) {
+      Set_Direction(&motor_array[i], BACKWARD);
+      (&motor_array[i])->speed = 100;
+    }
     else
       (&motor_array[i])->speed = 100;
-
     Run_Motor(&motor_array[i]);
   }
 }
