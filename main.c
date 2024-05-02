@@ -76,18 +76,16 @@ int main() {
     //printf("Right sensor: %d\tLeft sensor: %d\n", sensors[RIGHT_LINE_SENSOR].sensor_value, sensors[LEFT_LINE_SENSOR].sensor_value);
     if(sensors[LEFT_LINE_SENSOR].sensor_value && sensors[RIGHT_LINE_SENSOR].sensor_value){
       printf("\n**************************************BOTH SENSORS TRIPPED**************************************\n");
-      //Move_All_Backward(motors);
-      //break;
     }
 
-    while(sensors[LEFT_LINE_SENSOR].sensor_value && !sensors[RIGHT_LINE_SENSOR].sensor_value) {
+    while(sensors[LEFT_LINE_SENSOR].sensor_value) {
+      usleep(TURN_DELAY);
       Turn_Left(motors);
-      usleep(500);
     }
 
-    while(sensors[RIGHT_LINE_SENSOR].sensor_value && !sensors[LEFT_LINE_SENSOR].sensor_value) {
+    while(sensors[RIGHT_LINE_SENSOR].sensor_value) {
+      usleep(TURN_DELAY);
       Turn_Right(motors);
-      usleep(500);
     }
 
     Move_All_Forward(motors);

@@ -28,6 +28,8 @@
 #define MOTOR_C 2
 #define MOTOR_D 3
 
+#define TURN_DELAY 400
+
 // motor information structure
 typedef struct {
   unsigned int
