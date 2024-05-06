@@ -84,18 +84,18 @@ int main() {
 
     // if both line sensors sense the line, move forward until one of them no
     // longer senses the line
-    if (sensors[LEFT_LINE_SENSOR].sensor_value &&
+    while(sensors[LEFT_LINE_SENSOR].sensor_value &&
         sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Move_All_Forward(motors);
     }
 
     // if the left line sensor senses the line, turn car left
-    if (sensors[LEFT_LINE_SENSOR].sensor_value) {
+    while(sensors[LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
     }
 
     // if the right line sensor senses the line, turn car right
-    if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
+    while(sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
     }
 
