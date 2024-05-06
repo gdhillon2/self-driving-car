@@ -76,35 +76,35 @@ double Read_Sonic_Sensor(sensor_info *sensor) {
   double start, stop, distance;
 
   // set trig pin to high
-  gpioWrite(TRIG_PIN, PI_HIGH);
+  gpioWrite(FSONIC_SENSOR_TRIG, PI_HIGH);
 
   // sleep for 10 microseconds
   usleep(trig_sleep_duration);
 
   // set trig pin to low
-  gpioWrite(TRIG_PIN, PI_LOW);
+  gpioWrite(FSONIC_SENSOR_TRIG, PI_LOW);
 
   // while echo pin is low do nothing
-  while (gpioRead(ECHO_PIN) == PI_LOW) {
+  while (gpioRead(FSONIC_SENSOR_ECHO) == PI_LOW) {
   }
 
   // once its high, set start time
   start = time_time();
 
   // wait for echo pin to go low
-  while (gpioRead(ECHO_PIN) == PI_HIGH) {
+  while (gpioRead(FSONIC_SENSOR_ECHO) == PI_HIGH) {
   }
 
   // when echo pin goes low, end time
   stop = time_time();
 
   // do calculations s = (vt)/2
-  distance = (speed_of_sound(stop - start)) / 2;
+  distance = (speed_of_sound * (stop - start)) / 2;
 
   // print value and keep going
   printf("distance: %.1f cm\n", distance);
 
-  return distance
+  return distance;
 }
 
 // int Test_Sonic_Sensor(sensor_info sensor) {

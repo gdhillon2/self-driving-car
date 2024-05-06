@@ -84,7 +84,16 @@ int main() {
 
   while (running) {
 
-    double distance = Read_Sonic_Sensor(sensors[FRONT_SONIC_SENSOR]);
+    double distance = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
+    if(distance <= 10.0) {
+      running = 0;
+      Shift_Left(motors);
+      sleep(5);
+      Move_All_Forward(motors);
+      sleep(5);
+      Shift_Right(motors);
+      sleep(5);
+    }
     // if both line sensors sense the line, move forward until one of them
     // no longer senses the line if the left line sensor senses the line,
     // turn car left
