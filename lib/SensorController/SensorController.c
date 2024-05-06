@@ -17,8 +17,10 @@
 
 #define RIGHT_LINE_SENSOR_GPIO 17
 #define LEFT_LINE_SENSOR_GPIO 27
-#define FRONT_IR_SENSOR_GPIO -1 // TODO: UPDATE VALUE WITH ACTUAL GPIO PIN
-#define SIDE_IR_SENSOR_GPIO -1  // TODO: UPDATE VALUE WITH ACTUAL GPIO PIN
+#define FSONIC_SENSOR_TRIG 21
+#define FSONIC_SENSOR_ECHO 20
+#define BSONIC_SENSOR_TRIG -1 // TODO: UPDATE VALUE WITH ACTUAL GPIO PIN
+#define BSONIC_SENSOR_ECHO -1 // TODO: UPDATE VALUE WITH ACTUAL GPIO PIN
 
 // initializes the gpio pins needed
 // initializes the sensor structs required
@@ -64,3 +66,5 @@ void *Read_Sensor(void *arg) {
   }
   pthread_exit(NULL);
 }
+
+int Test_Sonic_Sensor(sensor_info sensor) {}
