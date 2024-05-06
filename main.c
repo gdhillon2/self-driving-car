@@ -83,13 +83,11 @@ int main() {
   int last_turn = -1;
 
   while (running) {
-    // TODO: IMPLEMENT OBSTACLE AVOIDANCE HERE (IT SHOULD TAKE PRIORITY OVER
-    // LINE DETECTION)
-    printf("left: %d\tright: %d\n", sensors[LEFT_LINE_SENSOR].sensor_value,
-           sensors[RIGHT_LINE_SENSOR].sensor_value);
-    // if both line sensors sense the line, move forward until one of them no
-    // longer senses the line
-    // if the left line sensor senses the line, turn car left
+
+    double distance = Read_Sonic_Sensor(sensors[FRONT_SONIC_SENSOR]);
+    // if both line sensors sense the line, move forward until one of them
+    // no longer senses the line if the left line sensor senses the line,
+    // turn car left
     while (sensors[LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
       if (sensors[LEFT_LINE_SENSOR].sensor_value &&
