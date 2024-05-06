@@ -24,19 +24,19 @@ void Run_Motor(motor_info *motor) {
     motor->speed = 100;
   }
 
-  printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
+  //printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
   PCA9685_SetPwmDutyCycle(motor->pwm, motor->speed);
 
   if (motor->direction == FORWARD) {
-    printf("forward\n");
+    //printf("forward\n");
     PCA9685_SetLevel(motor->IN1, 0);
     PCA9685_SetLevel(motor->IN2, 1);
   } else {
-    printf("backward\n");
+    //printf("backward\n");
     PCA9685_SetLevel(motor->IN1, 1);
     PCA9685_SetLevel(motor->IN2, 0);
   }
-  printf("Ran motor\n");
+  //printf("Ran motor\n");
   DEV_ModuleExit();
 }
 
@@ -58,7 +58,7 @@ void Move_All_Backward(motor_info *motor_array) {
 void Stop_Motor(motor_info *motor) {
   Init_Motorhat(motor->motorhat);
   PCA9685_SetPwmDutyCycle(motor->pwm, 0);
-  printf("stopping pwm channel %d\n", motor->pwm);
+  //printf("stopping pwm channel %d\n", motor->pwm);
   DEV_ModuleExit();
 }
 
@@ -74,7 +74,7 @@ void Switch_Direction(motor_info *motor) {
   } else if (motor->direction == BACKWARD) {
     motor->direction = FORWARD;
   }
-  printf("changed direction: %d\n", motor->direction);
+  //printf("changed direction: %d\n", motor->direction);
 }
 
 void Set_Direction(motor_info *motor, unsigned int direction) {

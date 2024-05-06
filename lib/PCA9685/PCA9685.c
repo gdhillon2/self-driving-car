@@ -95,10 +95,10 @@ void PCA9685_SetPWMFreq(UWORD freq) {
   prescaleval /= 4096.0;
   prescaleval /= freq;
   prescaleval -= 1;
-  DEBUG("prescaleval = %lf\r\n", prescaleval);
+  //DEBUG("prescaleval = %lf\r\n", prescaleval);
 
   UBYTE prescale = floor(prescaleval + 0.5);
-  DEBUG("prescaleval = %lf\r\n", prescaleval);
+  //DEBUG("prescaleval = %lf\r\n", prescaleval);
 
   UBYTE oldmode = PCA9685_ReadByte(MODE1);
   UBYTE newmode = (oldmode & 0x7F) | 0x10; // sleep

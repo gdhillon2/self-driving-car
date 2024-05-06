@@ -78,25 +78,41 @@ int main() {
 
   signal(SIGINT, sigintHandler);
 
+  // left turn = 0, right turn = 1
+  // initialized to -1 to signify there was no last turn
+  int last_turn = -1;
+
   while (running) {
     // TODO: IMPLEMENT OBSTACLE AVOIDANCE HERE (IT SHOULD TAKE PRIORITY OVER
     // LINE DETECTION)
-
+    printf("left: %d\tright: %d\n", sensors[LEFT_LINE_SENSOR].sensor_value, sensors[RIGHT_LINE_SENSOR].sensor_value);
     // if both line sensors sense the line, move forward until one of them no
     // longer senses the line
-    while(sensors[LEFT_LINE_SENSOR].sensor_value &&
-        sensors[RIGHT_LINE_SENSOR].sensor_value) {
-      Move_All_Forward(motors);
-    }
-
     // if the left line sensor senses the line, turn car left
     while(sensors[LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
+      while(sensors[LEFT_LINE_SENSOR].sensor_value &&
+             sensors[RIGHT_LINE_SENSOR].sensor_value) {
+        printf("BOTH SENSORS TRIGGERED ON TURN LEFT\n");
+        Turn_Left(motors);
+        }
     }
 
     // if the right line sensor senses the line, turn car right
     while(sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
+      if(sensors[LEFT_LINE_SENSOR].sensor_value &&
+             sensors[RIGHT_LINE_SENSOR].sensor_value) {
+        printf("BOTH SENSORS TRIGGERED ON TURN RIGHT\n");
+        printf("EMERGENCY RIGHT\n");
+        while(sensors[LEFT_LINE_SENSOR].sensor_value &&
+             sensors[RIGHT_LINE_SENSOR].sensor_value) {
+          Move_All_Forward(motors);
+        }
+        while(sensors[LEFT_LINE_SENSOR].sensor_value) {
+          Turn_Right(motors);
+        }
+      }
     }
 
     // default movement (both line sensers do not sense line), move car forward

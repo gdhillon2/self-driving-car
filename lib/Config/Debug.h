@@ -16,7 +16,8 @@
 
 #define USE_DEBUG 1
 #if USE_DEBUG
-	#define DEBUG(__info,...) printf("Debug : " __info,##__VA_ARGS__)
+//	#define DEBUG(__info,...) printf("Debug : " __info,##__VA_ARGS__)
+	#define DEBUG(__info,...) printf("")
 #else
 	#define DEBUG(__info,...)  
 #endif
