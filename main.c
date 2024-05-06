@@ -85,46 +85,45 @@ int main() {
   while (running) {
     // TODO: IMPLEMENT OBSTACLE AVOIDANCE HERE (IT SHOULD TAKE PRIORITY OVER
     // LINE DETECTION)
-    printf("left: %d\tright: %d\n", sensors[LEFT_LINE_SENSOR].sensor_value, sensors[RIGHT_LINE_SENSOR].sensor_value);
+    printf("left: %d\tright: %d\n", sensors[LEFT_LINE_SENSOR].sensor_value,
+           sensors[RIGHT_LINE_SENSOR].sensor_value);
     // if both line sensors sense the line, move forward until one of them no
     // longer senses the line
     // if the left line sensor senses the line, turn car left
-    while(sensors[LEFT_LINE_SENSOR].sensor_value) {
+    while (sensors[LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
-      if(sensors[LEFT_LINE_SENSOR].sensor_value &&
-             sensors[RIGHT_LINE_SENSOR].sensor_value) {
+      if (sensors[LEFT_LINE_SENSOR].sensor_value &&
+          sensors[RIGHT_LINE_SENSOR].sensor_value) {
         printf("BOTH SENSORS TRIGGERED ON TURN LEFT\n");
         printf("EMERGENCY LEFT\n");
-        while(sensors[LEFT_LINE_SENSOR].sensor_value ||
-            sensors[RIGHT_LINE_SENSOR].sensor_value) {
+        while (sensors[LEFT_LINE_SENSOR].sensor_value) {
           Move_All_Forward(motors);
         }
-        while(!sensors[RIGHT_LINE_SENSOR].sensor_value) {
+        while (!sensors[RIGHT_LINE_SENSOR].sensor_value) {
           Turn_Left(motors);
         }
-//        while(!sensors[LEFT_LINE_SENSOR].sensor_value) {
-//          Turn_Right(motors);
-//        }
+        //        while(!sensors[LEFT_LINE_SENSOR].sensor_value) {
+        //          Turn_Right(motors);
+        //        }
       }
     }
 
     // if the right line sensor senses the line, turn car right
-    while(sensors[RIGHT_LINE_SENSOR].sensor_value) {
+    while (sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
-      if(sensors[LEFT_LINE_SENSOR].sensor_value &&
-             sensors[RIGHT_LINE_SENSOR].sensor_value) {
+      if (sensors[LEFT_LINE_SENSOR].sensor_value &&
+          sensors[RIGHT_LINE_SENSOR].sensor_value) {
         printf("BOTH SENSORS TRIGGERED ON TURN RIGHT\n");
         printf("EMERGENCY RIGHT\n");
-        while(sensors[LEFT_LINE_SENSOR].sensor_value ||
-             sensors[RIGHT_LINE_SENSOR].sensor_value) {
+        while (sensors[LEFT_LINE_SENSOR].sensor_value) {
           Move_All_Forward(motors);
         }
-        while(!sensors[LEFT_LINE_SENSOR].sensor_value) {
+        while (!sensors[RIGHT_LINE_SENSOR].sensor_value) {
           Turn_Right(motors);
         }
-//        while(!sensors[RIGHT_LINE_SENSOR].sensor_value) {
-//          Turn_Left(motors);
-//        }
+        //        while(!sensors[RIGHT_LINE_SENSOR].sensor_value) {
+        //          Turn_Left(motors);
+        //        }
       }
     }
 
