@@ -102,6 +102,9 @@ int main() {
         while(!sensors[RIGHT_LINE_SENSOR].sensor_value) {
           Turn_Left(motors);
         }
+//        while(!sensors[LEFT_LINE_SENSOR].sensor_value) {
+//          Turn_Right(motors);
+//        }
       }
     }
 
@@ -119,6 +122,9 @@ int main() {
         while(!sensors[LEFT_LINE_SENSOR].sensor_value) {
           Turn_Right(motors);
         }
+//        while(!sensors[RIGHT_LINE_SENSOR].sensor_value) {
+//          Turn_Left(motors);
+//        }
       }
     }
 
