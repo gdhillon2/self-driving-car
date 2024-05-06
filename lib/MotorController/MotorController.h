@@ -30,6 +30,9 @@
 
 #define TURN_DELAY 400
 
+#define LEFT_TURN 0
+#define RIGHT_TURN 1
+
 // motor information structure
 typedef struct {
   unsigned int

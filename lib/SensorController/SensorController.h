@@ -22,5 +22,4 @@ typedef struct {
 sensor_info *Init_Sensors();
 void Free_Sensors(sensor_info *sensor_array);
 void *Read_Sensor(void *args);
-void Running_Test();
 #endif // SENSOR_CONTROLLER_H

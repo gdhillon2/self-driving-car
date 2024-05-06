@@ -82,27 +82,28 @@ int main() {
     // TODO: IMPLEMENT OBSTACLE AVOIDANCE HERE (IT SHOULD TAKE PRIORITY OVER
     // LINE DETECTION)
 
-    // printf("Right sensor: %d\tLeft sensor: %d\n",
-    // sensors[RIGHT_LINE_SENSOR].sensor_value,
-    // sensors[LEFT_LINE_SENSOR].sensor_value);
+    // if both line sensors sense the line, move forward until one of them no
+    // longer senses the line
     if (sensors[LEFT_LINE_SENSOR].sensor_value &&
         sensors[RIGHT_LINE_SENSOR].sensor_value) {
-      printf("\n**************************************BOTH SENSORS "
-             "TRIPPED**************************************\n");
+      Move_All_Forward(motors);
     }
 
-    while (sensors[LEFT_LINE_SENSOR].sensor_value) {
-      usleep(TURN_DELAY);
+    // if the left line sensor senses the line, turn car left
+    if (sensors[LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
     }
 
-    while(sensors[RIGHT_LINE_SENSOR].sensor_value) {
-      usleep(TURN_DELAY);
+    // if the right line sensor senses the line, turn car right
+    if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
     }
 
+    // default movement (both line sensers do not sense line), move car forward
     Move_All_Forward(motors);
   }
+
+  Stop_All_Motors(motors);
 
   if (pthread_join(threads[RIGHT_LINE_SENSOR], NULL)) {
     printf("failed to join right line sensor\n");
@@ -115,7 +116,6 @@ int main() {
     Free_Sensors(sensors);
     return 1;
   }
-  Stop_All_Motors(motors);
   printf("\nshutting down\n");
   free(motors);
   Free_Sensors(sensors);
