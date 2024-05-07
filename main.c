@@ -78,7 +78,7 @@ int main() {
         front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
       }
       
-      usleep(1000000);
+      usleep(1500000);
 
       while (!side_sonic_sensor && running) {
         // while(!sensors[SIDE_SONIC_SENSOR].sensor_value)
