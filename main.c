@@ -63,8 +63,7 @@ int main() {
     double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
     // double side_sonic_sensor =
     // Read_Sonic_Sensor(&sensors[SIDE_SONIC_SENSOR]);
-    // WARNING: CHANGE TO SIDE SONIC SENSOR LATER
-    int side_sonic_sensor = gpioRead(TEST_IR_GPIO);
+    int back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
     if (front_sonic_sensor <= 10.0) {
       //    running = 0;
       //    Shift_Left(motors);
@@ -78,28 +77,28 @@ int main() {
         front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
         printf("shifting left to avoid object\n");
       }
-      
+
       usleep(1300000);
 
-      while (side_sonic_sensor) {
+      while (back_sonic_sensor >= 10.0) {
         // while(!sensors[SIDE_SONIC_SENSOR].sensor_value)
         Move_All_Forward(motors);
-        side_sonic_sensor = gpioRead(TEST_IR_GPIO);
+        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
         printf("moving forward waiting to go past object\n");
       }
 
-      while (!side_sonic_sensor) {
-        printf("%d\n", side_sonic_sensor);
+      while (back_sonic_sensor < 10.0) {
+        printf("%d\n", back_sonic_sensor);
         Move_All_Forward(motors);
-        side_sonic_sensor = gpioRead(TEST_IR_GPIO);
+        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
         printf("object has been sensed, moving forward to go past object\n");
       }
-      
+
       usleep(100000);
 
-      while (side_sonic_sensor) {
+      while (back_sonic_sensor >= 10.0) {
         Shift_Right(motors);
-        side_sonic_sensor = gpioRead(TEST_IR_GPIO);
+        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
       }
 
       printf("going back to regular line detection\n");

@@ -118,7 +118,3 @@ double Read_Sonic_Sensor(sensor_info *sensor) {
 
   return distance;
 }
-
-// int Test_Sonic_Sensor(sensor_info sensor) {
-//
-// }
