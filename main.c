@@ -73,23 +73,27 @@ int main() {
       //    sleep(1);
       //    Shift_Right(motors);
       //    sleep(1);
-      while (front_sonic_sensor <= 10.0) {
+      while (front_sonic_sensor <= 10.0 && running) {
         Shift_Left(motors);
         front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
       }
+      
+      usleep(1000000);
 
-      while (side_sonic_sensor > 10.0) {
+      while (!side_sonic_sensor && running) {
         // while(!sensors[SIDE_SONIC_SENSOR].sensor_value)
         Move_All_Forward(motors);
         side_sonic_sensor = gpioRead(TEST_IR_GPIO);
       }
 
-      while (side_sonic_sensor <= 10.0) {
+      while (side_sonic_sensor && running) {
         Move_All_Forward(motors);
         side_sonic_sensor = gpioRead(TEST_IR_GPIO);
       }
+      
+      usleep(100000);
 
-      while (!sensors[LEFT_LINE_SENSOR].sensor_value) {
+      while (!side_sonic_sensor && running) {
         Shift_Right(motors);
       }
     }
