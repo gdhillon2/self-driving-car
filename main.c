@@ -79,7 +79,7 @@ int main() {
         printf("shifting left to avoid object\n");
       }
       
-      usleep(1500000);
+      usleep(1300000);
 
       while (side_sonic_sensor) {
         // while(!sensors[SIDE_SONIC_SENSOR].sensor_value)
@@ -88,18 +88,21 @@ int main() {
         printf("moving forward waiting to go past object\n");
       }
 
-      while (!side_sonic_sensor && running) {
+      while (!side_sonic_sensor) {
         printf("%d\n", side_sonic_sensor);
         Move_All_Forward(motors);
         side_sonic_sensor = gpioRead(TEST_IR_GPIO);
         printf("object has been sensed, moving forward to go past object\n");
       }
       
-      usleep(1000);
+      usleep(100000);
 
       while (side_sonic_sensor) {
         Shift_Right(motors);
+        side_sonic_sensor = gpioRead(TEST_IR_GPIO);
       }
+
+      printf("going back to regular line detection\n");
     }
     //    if (sensors[RIGHT_LINE_SENSOR].sensor_value &&
     //    sensors[LEFT_LINE_SENSOR].sensor_value) {
