@@ -102,7 +102,7 @@ double Read_Sonic_Sensor(sensor_info *sensor) {
   distance = (speed_of_sound * (stop - start)) / 2;
 
   // print value and keep going
-  printf("distance: %.1f cm\n", distance);
+  //printf("distance: %.1f cm\n", distance);
 
   return distance;
 }

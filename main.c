@@ -56,31 +56,7 @@ int main() {
     return 1;
   }
 
-  // TODO: ADD 2 MORE THREADS FOR IR SENSORS
-  // NOTE: YOU WILL NEED TO CHANGE SENSOR_NUM FROM 2 TO 4, THEN YOU SHOULD BE
-  // ABLE TO JUST UNCOMMENT THIS CODE (IT IS NOT TESTED SO PLEASE VERIFY THAT IT
-  // IS CORRECT)
-
-  // creates the IR sensor threads and sends them the necessary structs
-  //  if (pthread_create(&threads[FRONT_IR_SENSOR], NULL, Read_Sensor,
-  //                     (void *)&sensors[FRONT_IR_SENSOR])) {
-  //    printf("failed to create front IR sensor thread\n");
-  //    Free_Sensors(sensors);
-  //    return 1;
-  //  }
-  //
-  //  if (pthread_create(&threads[SIDE_IR_SENSOR], NULL, Read_Sensor,
-  //                     (void *)&sensors[SIDE_IR_SENSOR])) {
-  //    printf("failed to create side IR sensor thread\n");
-  //    Free_Sensors(sensors);
-  //    return 1;
-  //  }
-
   signal(SIGINT, sigintHandler);
-
-  // left turn = 0, right turn = 1
-  // initialized to -1 to signify there was no last turn
-  int last_turn = -1;
 
   while (running) {
 
@@ -97,18 +73,21 @@ int main() {
     // if both line sensors sense the line, move forward until one of them
     // no longer senses the line if the left line sensor senses the line,
     // turn car left
-    while (sensors[LEFT_LINE_SENSOR].sensor_value) {
+    if (sensors[LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
+      printf("turning left\n");
       if (sensors[LEFT_LINE_SENSOR].sensor_value &&
           sensors[RIGHT_LINE_SENSOR].sensor_value) {
         printf("BOTH SENSORS TRIGGERED ON TURN LEFT\n");
         printf("EMERGENCY LEFT\n");
-        if (sensors[LEFT_LINE_SENSOR].sensor_value ||
+        while (sensors[LEFT_LINE_SENSOR].sensor_value ||
             sensors[RIGHT_LINE_SENSOR].sensor_value) {
           Move_All_Forward(motors);
+          printf("MOVING FORWARD TO GO PAST SENSORS\n");
         }
         while (!sensors[RIGHT_LINE_SENSOR].sensor_value) {
           Turn_Left(motors);
+          printf("EMERGENCY LEFT TURN\n");
         }
         //        while(!sensors[LEFT_LINE_SENSOR].sensor_value) {
         //          Turn_Right(motors);
@@ -117,17 +96,20 @@ int main() {
     }
 
     // if the right line sensor senses the line, turn car right
-    while (sensors[RIGHT_LINE_SENSOR].sensor_value) {
+    else if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
+      printf("turning right\n");
       if (sensors[LEFT_LINE_SENSOR].sensor_value &&
           sensors[RIGHT_LINE_SENSOR].sensor_value) {
         printf("BOTH SENSORS TRIGGERED ON TURN RIGHT\n");
         printf("EMERGENCY RIGHT\n");
-        if (sensors[LEFT_LINE_SENSOR].sensor_value ||
+        while (sensors[LEFT_LINE_SENSOR].sensor_value ||
             sensors[RIGHT_LINE_SENSOR].sensor_value) {
           Move_All_Forward(motors);
+          printf("MOVING FORWARD TO GO PAST SENSORS\n");
         }
         while (!sensors[LEFT_LINE_SENSOR].sensor_value) {
+          printf("EMERGENCY RIGHT TURN\n");
           Turn_Right(motors);
         }
         //        while(!sensors[RIGHT_LINE_SENSOR].sensor_value) {
@@ -137,7 +119,10 @@ int main() {
     }
 
     // default movement (both line sensers do not sense line), move car forward
-    Move_All_Forward(motors);
+    else if (!(sensors[LEFT_LINE_SENSOR].sensor_value && sensors[RIGHT_LINE_SENSOR].sensor_value)){
+      printf("moving forward\n");
+      Move_All_Forward(motors);
+    }
   }
 
   Stop_All_Motors(motors);
