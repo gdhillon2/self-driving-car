@@ -33,8 +33,8 @@ sensor_info *Init_Sensors() {
   gpioSetMode(LEFT_LINE_SENSOR_GPIO, PI_INPUT);
   gpioSetMode(FSONIC_SENSOR_ECHO, PI_INPUT);
   gpioSetMode(FSONIC_SENSOR_TRIG, PI_OUTPUT);
-  gpioSetMode(BSONIC_SENSOR_TRIG, PI_INPUT);
   gpioSetMode(BSONIC_SENSOR_ECHO, PI_INPUT);
+  gpioSetMode(BSONIC_SENSOR_TRIG, PI_OUTPUT);
 
   // initialize the structs used for the 2 sensors
   // TODO: NEED TO INITIALIZE THE TWO IR STRUCTS AS WELL (JUST UNCOMMENT THE
