@@ -8,7 +8,7 @@
 #define RIGHT_LINE_SENSOR 0
 #define LEFT_LINE_SENSOR 1
 #define FRONT_SONIC_SENSOR 2
-#define SIDE_SONIC_SENSOR 3
+#define BACK_SONIC_SENSOR 3
 
 #define TEST_IR_GPIO 22
 #define SENSOR_NUM                                                             \
@@ -18,6 +18,7 @@
 // gpio pin and sensor value
 typedef struct {
   int gpio_pin;
+  int gpio_pin_2;
   int sensor_value;
   double distance;
 } sensor_info;
