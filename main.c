@@ -16,6 +16,7 @@ volatile sig_atomic_t running = 1;
 void sigintHandler() { running = 0; }
 
 int main() {
+  sleep(1);
   printf("press ctrl+c to shut down\n");
   // initialize the motor information structures
   motor_info *motors = malloc(sizeof(motor_info) * MOTOR_NUM);
@@ -59,7 +60,6 @@ int main() {
   signal(SIGINT, sigintHandler);
 
   while (running) {
-
     double distance = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
     if(distance <= 10.0) {
       running = 0;
@@ -86,12 +86,9 @@ int main() {
           printf("MOVING FORWARD TO GO PAST SENSORS\n");
         }
         while (!sensors[RIGHT_LINE_SENSOR].sensor_value) {
-          Turn_Left(motors);
           printf("EMERGENCY LEFT TURN\n");
+          Turn_Left(motors);
         }
-        //        while(!sensors[LEFT_LINE_SENSOR].sensor_value) {
-        //          Turn_Right(motors);
-        //        }
       }
     }
 
@@ -112,9 +109,6 @@ int main() {
           printf("EMERGENCY RIGHT TURN\n");
           Turn_Right(motors);
         }
-        //        while(!sensors[RIGHT_LINE_SENSOR].sensor_value) {
-        //          Turn_Left(motors);
-        //        }
       }
     }
 
