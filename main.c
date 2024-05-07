@@ -60,34 +60,53 @@ int main() {
   signal(SIGINT, sigintHandler);
 
   while (running) {
-    double distance = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
-    if (distance <= 10.0) {
-//    running = 0;
-//    Shift_Left(motors);
-//    sleep(1);
-//    Move_All_Forward(motors);
-//    sleep(1);
-//    Shift_Right(motors);
-//    sleep(1);
-      while (distance <= 10.0) {
+    double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
+    // double side_sonic_sensor =
+    // Read_Sonic_Sensor(&sensors[SIDE_SONIC_SENSOR]);
+    // WARNING: CHANGE TO SIDE SONIC SENSOR LATER
+    int side_sonic_sensor = gpioRead(TEST_IR_GPIO);
+    if (front_sonic_sensor <= 10.0) {
+      //    running = 0;
+      //    Shift_Left(motors);
+      //    sleep(1);
+      //    Move_All_Forward(motors);
+      //    sleep(1);
+      //    Shift_Right(motors);
+      //    sleep(1);
+      while (front_sonic_sensor <= 10.0) {
+        Shift_Left(motors);
+        front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
+      }
+
+      while (side_sonic_sensor > 10.0) {
+        // while(!sensors[SIDE_SONIC_SENSOR].sensor_value)
+        Move_All_Forward(motors);
+        side_sonic_sensor = gpioRead(TEST_IR_GPIO);
+      }
+
+      while (side_sonic_sensor <= 10.0) {
+        Move_All_Forward(motors);
+        side_sonic_sensor = gpioRead(TEST_IR_GPIO);
+      }
+
+      while (!sensors[LEFT_LINE_SENSOR].sensor_value) {
         Shift_Right(motors);
-        distance = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
       }
     }
-//    if (sensors[RIGHT_LINE_SENSOR].sensor_value && sensors[LEFT_LINE_SENSOR].sensor_value) {
-//      Move_All_Forward(motors);
-//    }
-    else if (!sensors[RIGHT_LINE_SENSOR].sensor_value && !sensors[LEFT_LINE_SENSOR].sensor_value) {
+    //    if (sensors[RIGHT_LINE_SENSOR].sensor_value &&
+    //    sensors[LEFT_LINE_SENSOR].sensor_value) {
+    //      Move_All_Forward(motors);
+    //    }
+    else if (!sensors[RIGHT_LINE_SENSOR].sensor_value &&
+             !sensors[LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
-    }
-    else if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
+    } else if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
     }
-    //else if (sensors[LEFT_LINE_SENSOR].sensor_value) {
+    // else if (sensors[LEFT_LINE_SENSOR].sensor_value) {
     else {
       Move_All_Forward(motors);
     }
-
   }
   Stop_All_Motors(motors);
 
