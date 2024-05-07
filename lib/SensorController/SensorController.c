@@ -56,12 +56,12 @@ sensor_info *Init_Sensors() {
   sensor_array[FRONT_SONIC_SENSOR].gpio_pin = FSONIC_SENSOR_TRIG;
   sensor_array[FRONT_SONIC_SENSOR].gpio_pin_2 = FSONIC_SENSOR_ECHO;
   sensor_array[FRONT_SONIC_SENSOR].sensor_value = 0;
-  sensor_array[FRONT_SONIC_SENSOR].distance = 1000;
+  sensor_array[FRONT_SONIC_SENSOR].distance = 1000.0;
 
   sensor_array[BACK_SONIC_SENSOR].gpio_pin = BSONIC_SENSOR_TRIG;
   sensor_array[BACK_SONIC_SENSOR].gpio_pin_2 = BSONIC_SENSOR_ECHO;
   sensor_array[BACK_SONIC_SENSOR].sensor_value = 0;
-  sensor_array[BACK_SONIC_SENSOR].distance = 1000;
+  sensor_array[BACK_SONIC_SENSOR].distance = 1000.0;
 
   return sensor_array;
 }

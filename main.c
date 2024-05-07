@@ -63,7 +63,7 @@ int main() {
     double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
     // double side_sonic_sensor =
     // Read_Sonic_Sensor(&sensors[SIDE_SONIC_SENSOR]);
-    int back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
+    double back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
     if (front_sonic_sensor <= 10.0) {
       //    running = 0;
       //    Shift_Left(motors);
