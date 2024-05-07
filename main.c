@@ -79,7 +79,8 @@ int main() {
     else if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
     }
-    else if (sensors[LEFT_LINE_SENSOR].sensor_value) {
+    //else if (sensors[LEFT_LINE_SENSOR].sensor_value) {
+    else {
       Move_All_Forward(motors);
     }
 
