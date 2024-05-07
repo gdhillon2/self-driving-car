@@ -10,6 +10,7 @@
 #define FRONT_SONIC_SENSOR 2
 #define SIDE_SONIC_SENSOR 3
 
+#define TEST_IR_GPIO 22
 #define SENSOR_NUM                                                             \
   4 // TODO: CHANGE THIS TO 4 WHEN SONIC SENSORS ARE IMPLEMENTED
 
