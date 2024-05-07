@@ -61,42 +61,30 @@ int main() {
 
   while (running) {
     double distance = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
-    if(distance <= 10.0) {
+    if (distance <= 10.0) {
       running = 0;
       Shift_Left(motors);
-      sleep(5);
+      sleep(1);
       Move_All_Forward(motors);
-      sleep(5);
+      sleep(1);
       Shift_Right(motors);
-      sleep(5);
+      sleep(1);
     }
-    while (sensors[LEFT_LINE_SENSOR].sensor_value) {
+//    if (sensors[RIGHT_LINE_SENSOR].sensor_value && sensors[LEFT_LINE_SENSOR].sensor_value) {
+//      Move_All_Forward(motors);
+//    }
+    else if (!sensors[RIGHT_LINE_SENSOR].sensor_value && !sensors[LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
-      if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
-        while (sensors[LEFT_LINE_SENSOR].sensor_value) {
-          Turn_Left(motors);
-        }
-        while (sensors[RIGHT_LINE_SENSOR].sensor_value) {
-          Move_All_Forward(motors);
-        }
-      }
     }
-
-    while (sensors[RIGHT_LINE_SENSOR].sensor_value) {
+    else if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
-      if (sensors[LEFT_LINE_SENSOR].sensor_value) {
-        while (sensors[RIGHT_LINE_SENSOR].sensor_value) {
-          Turn_Right(motors);
-        }
-        while (sensors[LEFT_LINE_SENSOR].sensor_value) { 
-          Move_All_Forward(motors);
-        }
-      }
+    }
+    else if (sensors[LEFT_LINE_SENSOR].sensor_value) {
+      Move_All_Forward(motors);
     }
 
-    Move_All_Forward(motors);
   }
-    Stop_All_Motors(motors);
+  Stop_All_Motors(motors);
 
   if (pthread_join(threads[RIGHT_LINE_SENSOR], NULL)) {
     printf("failed to join right line sensor\n");

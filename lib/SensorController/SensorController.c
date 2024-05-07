@@ -65,7 +65,6 @@ void *Read_Sensor(void *arg) {
   sensor_info *sensor_args = arg;
   while (running) {
     sensor_args->sensor_value = gpioRead(sensor_args->gpio_pin);
-    usleep(1000);
   }
   pthread_exit(NULL);
 }
