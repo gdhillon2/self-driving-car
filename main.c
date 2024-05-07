@@ -62,13 +62,17 @@ int main() {
   while (running) {
     double distance = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
     if (distance <= 10.0) {
-      running = 0;
-      Shift_Left(motors);
-      sleep(1);
-      Move_All_Forward(motors);
-      sleep(1);
-      Shift_Right(motors);
-      sleep(1);
+//    running = 0;
+//    Shift_Left(motors);
+//    sleep(1);
+//    Move_All_Forward(motors);
+//    sleep(1);
+//    Shift_Right(motors);
+//    sleep(1);
+      while (distance <= 10.0) {
+        Shift_Right(motors);
+        distance = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
+      }
     }
 //    if (sensors[RIGHT_LINE_SENSOR].sensor_value && sensors[LEFT_LINE_SENSOR].sensor_value) {
 //      Move_All_Forward(motors);
