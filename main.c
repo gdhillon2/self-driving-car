@@ -80,25 +80,24 @@ int main() {
         printf("shifting left to avoid object\n");
       }
 
-      usleep(1300000);
+      usleep(100000);
 
-      while (back_sonic_sensor >= 50.0) {
+      while (back_sonic_sensor >= 40.0) {
         // while(!sensors[SIDE_SONIC_SENSOR].sensor_value)
         Move_All_Forward(motors);
         back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
         printf("moving forward waiting to go past object\n");
       }
 
-      while (back_sonic_sensor < 50.0) {
+      while (back_sonic_sensor < 40.0) {
         printf("%d\n", back_sonic_sensor);
         Move_All_Forward(motors);
         back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
         printf("object has been sensed, moving forward to go past object\n");
       }
 
-      usleep(70000);
 
-      while (back_sonic_sensor >= 50.0) {
+      while (back_sonic_sensor >= 40.0) {
         Shift_Right(motors);
         back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
         if (sensors[LEFT_LINE_SENSOR].sensor_value) {
