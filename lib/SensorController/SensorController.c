@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define BACK_LEFT_SENSOR 5
+#define FRONT_LEFT_SENSOR 6
 #define RIGHT_LINE_SENSOR_GPIO 17
 #define LEFT_LINE_SENSOR_GPIO 27
 #define FSONIC_SENSOR_TRIG 21
