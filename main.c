@@ -132,6 +132,7 @@ int main() {
 
       while (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
              !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && running) {
+        usleep(10000);
         Turn_Left(motors);
       }
 
@@ -146,6 +147,7 @@ int main() {
         printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d",
                gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO),
                gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
+        usleep(10000);
         Turn_Right(motors);
       }
 
