@@ -60,13 +60,13 @@ int main() {
   // this is initialized as an array because SensorController.h has macros for
   // the indices
   // please refer to the comment above or SensorController.h for the indices
-  pthread_t threads[SENSOR_NUM];
+  // pthread_t threads[SENSOR_NUM];
 
-//  int thread_create_check = Create_Sensor_Threads(threads, sensors);
-//  if (thread_create_check) {
-//    printf("failed to create all threads\n");
-//    return 1;
-//  }
+  //  int thread_create_check = Create_Sensor_Threads(threads, sensors);
+  //  if (thread_create_check) {
+  //    printf("failed to create all threads\n");
+  //    return 1;
+  //  }
 
   signal(SIGINT, sigintHandler);
 
@@ -78,79 +78,89 @@ int main() {
     // printf("front sonic distance: %.1f\n", front_sonic_sensor);
     double back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
     // printf("back sonic distance: %.1f\n", back_sonic_sensor);
-//    if (front_sonic_sensor <= 10.0) {
-//      while (front_sonic_sensor <= 15.0 && running) {
-//        Shift_Left(motors);
-//        front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
-//        printf("shifting left to avoid object\n");
-//      }
-//
-//      usleep(100000);
-//
-//      while (back_sonic_sensor >= 40.0) {
-//        Move_All_Forward(motors);
-//        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-//        printf("moving forward waiting to go past object\n");
-//      }
-//
-//      while (back_sonic_sensor < 40.0) {
-//        printf("%d\n", back_sonic_sensor);
-//        Move_All_Forward(motors);
-//        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-//        printf("object has been sensed, moving forward to go past object\n");
-//      }
-//
-//      while (back_sonic_sensor >= 40.0) {
-//        Shift_Right(motors);
-//        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-//        if (sensors[FRONT_LEFT_LINE_SENSOR].sensor_value) {
-//          break;
-//        }
-//      }
-//
-//      printf("going back to regular line detection\n");
-//    }
+    //    if (front_sonic_sensor <= 10.0) {
+    //      while (front_sonic_sensor <= 15.0 && running) {
+    //        Shift_Left(motors);
+    //        front_sonic_sensor =
+    //        Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]); printf("shifting
+    //        left to avoid object\n");
+    //      }
+    //
+    //      usleep(100000);
+    //
+    //      while (back_sonic_sensor >= 40.0) {
+    //        Move_All_Forward(motors);
+    //        back_sonic_sensor =
+    //        Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); printf("moving
+    //        forward waiting to go past object\n");
+    //      }
+    //
+    //      while (back_sonic_sensor < 40.0) {
+    //        printf("%d\n", back_sonic_sensor);
+    //        Move_All_Forward(motors);
+    //        back_sonic_sensor =
+    //        Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); printf("object has
+    //        been sensed, moving forward to go past object\n");
+    //      }
+    //
+    //      while (back_sonic_sensor >= 40.0) {
+    //        Shift_Right(motors);
+    //        back_sonic_sensor =
+    //        Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); if
+    //        (sensors[FRONT_LEFT_LINE_SENSOR].sensor_value) {
+    //          break;
+    //        }
+    //      }
+    //
+    //      printf("going back to regular line detection\n");
+    //    }
     if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO)) {
       hard_left_turn = 1;
       hard_right_turn = 0;
-    }
-    else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO)) {
+    } else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO)) {
       hard_right_turn = 1;
       hard_left_turn = 0;
     }
 
-    if (hard_left_turn && !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
-      while (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && running) {
+    if (hard_left_turn && !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
+        !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
+
+      while (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
+             !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && running) {
         Turn_Left(motors);
       }
+
       hard_left_turn = 0;
-    }
-    else if (hard_right_turn && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
-      while (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) && running) {
+    } else if (hard_right_turn && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+               !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
+
+      while (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+             !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) && running) {
+        printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d",
+               gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO),
+               gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
         Turn_Right(motors);
       }
+
       hard_right_turn = 0;
-    }
-    else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
+    } else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Left(motors);
-    }
-    else if (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
+    } else if (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Right(motors);
-    }
-    else {
-        Move_All_Forward(motors);
+    } else {
+      Move_All_Forward(motors);
     }
   }
   printf("exiting running loop\n");
   Stop_All_Motors(motors);
 
-//  int thread_join_check = Join_Sensor_Threads(threads);
-//  if (thread_join_check) {
-//    printf("failed to join threads\n");
-//    free(motors);
-//    Free_Sensors(sensors);
-//    return 1;
-//  }
+  //  int thread_join_check = Join_Sensor_Threads(threads);
+  //  if (thread_join_check) {
+  //    printf("failed to join threads\n");
+  //    free(motors);
+  //    Free_Sensors(sensors);
+  //    return 1;
+  //  }
 
   printf("\nshutting down successfully\n");
   free(motors);
