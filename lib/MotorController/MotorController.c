@@ -24,24 +24,27 @@ void Run_Motor(motor_info *motor) {
     motor->speed = 100;
   }
 
-  //printf("pwm %d speed %d direction ", motor->pwm, motor->speed);
   PCA9685_SetPwmDutyCycle(motor->pwm, motor->speed);
 
   if (motor->direction == FORWARD) {
-    //printf("forward\n");
     PCA9685_SetLevel(motor->IN1, 0);
     PCA9685_SetLevel(motor->IN2, 1);
   } else {
-    //printf("backward\n");
     PCA9685_SetLevel(motor->IN1, 1);
     PCA9685_SetLevel(motor->IN2, 0);
   }
-  //printf("Ran motor\n");
   DEV_ModuleExit();
 }
 
+void Move_All_Motors(motor_info *motor_array) {
+  for (int i = 0; i < MOTOR_NUM; i++) {
+    Set_Direction(&motor_array[i], FORWARD);
+    Run_Motor(&motor_array[i]);
+  }
+}
+
 void Move_All_Forward(motor_info *motor_array) {
-  for(int i = 0; i < MOTOR_NUM; i++) {
+  for (int i = 0; i < MOTOR_NUM; i++) {
     (&motor_array[i])->speed = 100;
     Set_Direction(&motor_array[i], FORWARD);
     Run_Motor(&motor_array[i]);
@@ -49,7 +52,7 @@ void Move_All_Forward(motor_info *motor_array) {
 }
 
 void Move_All_Backward(motor_info *motor_array) {
-  for(int i = 0; i < MOTOR_NUM; i++) {
+  for (int i = 0; i < MOTOR_NUM; i++) {
     (&motor_array[i])->speed = 100;
     Set_Direction(&motor_array[i], BACKWARD);
     Run_Motor(&motor_array[i]);
@@ -58,7 +61,6 @@ void Move_All_Backward(motor_info *motor_array) {
 void Stop_Motor(motor_info *motor) {
   Init_Motorhat(motor->motorhat);
   PCA9685_SetPwmDutyCycle(motor->pwm, 0);
-  //printf("stopping pwm channel %d\n", motor->pwm);
   DEV_ModuleExit();
 }
 
@@ -74,7 +76,6 @@ void Switch_Direction(motor_info *motor) {
   } else if (motor->direction == BACKWARD) {
     motor->direction = FORWARD;
   }
-  //printf("changed direction: %d\n", motor->direction);
 }
 
 void Set_Direction(motor_info *motor, unsigned int direction) {
@@ -134,8 +135,7 @@ void Turn_Left(motor_info *motor_array) {
     if (i == MOTOR_A || i == MOTOR_D) {
       Set_Direction(&motor_array[i], BACKWARD);
       (&motor_array[i])->speed = 100;
-    }
-    else
+    } else
       (&motor_array[i])->speed = 100;
     Run_Motor(&motor_array[i]);
   }

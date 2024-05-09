@@ -28,11 +28,6 @@
 #define MOTOR_C 2
 #define MOTOR_D 3
 
-#define TURN_DELAY 400
-
-#define LEFT_TURN 0
-#define RIGHT_TURN 1
-
 // motor information structure
 typedef struct {
   unsigned int
@@ -50,6 +45,7 @@ void Init_Motor(motor_info *motor, unsigned int dir, uint16_t speed,
                 uint8_t pwm, uint8_t IN1, uint8_t IN2, uint8_t motorhat);
 void Run_Motor(motor_info *motor);
 void Stop_Motor(motor_info *motor);
+void Move_All_Motors(motor_info *motor);
 void Move_All_Forward(motor_info *motor_array);
 void Move_All_Backward(motor_info *motor_array);
 void Stop_All_Motors(motor_info *motor_array);
