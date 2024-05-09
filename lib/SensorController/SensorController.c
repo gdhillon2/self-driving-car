@@ -15,14 +15,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define BACK_LEFT_SENSOR 5
-#define FRONT_LEFT_SENSOR 6
-#define RIGHT_LINE_SENSOR_GPIO 17
-#define LEFT_LINE_SENSOR_GPIO 27
+#define BACK_LEFT_LINE_SENSOR_GPIO 5
+#define FRONT_LEFT_LINE_SENSOR_GPIO 6
+#define FRONT_RIGHT_LINE_SENSOR_GPIO 27
+#define BACK_RIGHT_LINE_SENSOR_GPIO 17
 #define FSONIC_SENSOR_TRIG 21
 #define FSONIC_SENSOR_ECHO 20
-#define BSONIC_SENSOR_TRIG 23 // TODO: UPDATE VALUE WITH ACTUAL GPIO PIN
-#define BSONIC_SENSOR_ECHO 24 // TODO: UPDATE VALUE WITH ACTUAL GPIO PIN
+#define BSONIC_SENSOR_TRIG 23
+#define BSONIC_SENSOR_ECHO 24
 
 // initializes the gpio pins needed
 // initializes the sensor structs required
@@ -31,29 +31,41 @@
  ***************************************************/
 sensor_info *Init_Sensors() {
   gpioInitialise();
-  gpioSetMode(RIGHT_LINE_SENSOR_GPIO, PI_INPUT);
-  gpioSetMode(LEFT_LINE_SENSOR_GPIO, PI_INPUT);
+  gpioSetMode(BACK_LEFT_LINE_SENSOR_GPIO, PI_INPUT);
+  gpioSetMode(FRONT_LEFT_LINE_SENSOR_GPIO, PI_INPUT);
+  gpioSetMode(FRONT_RIGHT_LINE_SENSOR_GPIO, PI_INPUT);
+  gpioSetMode(BACK_RIGHT_LINE_SENSOR_GPIO, PI_INPUT);
   gpioSetMode(FSONIC_SENSOR_ECHO, PI_INPUT);
   gpioSetMode(FSONIC_SENSOR_TRIG, PI_OUTPUT);
   gpioSetMode(BSONIC_SENSOR_ECHO, PI_INPUT);
   gpioSetMode(BSONIC_SENSOR_TRIG, PI_OUTPUT);
 
-  // initialize the structs used for the 2 sensors
-  // TODO: NEED TO INITIALIZE THE TWO IR STRUCTS AS WELL (JUST UNCOMMENT THE
-  // INITIALIZATIONS)
+  // initialize the structs used for the 6 sensors
   sensor_info *sensor_array = malloc(sizeof(sensor_info) * SENSOR_NUM);
 
-  sensor_array[RIGHT_LINE_SENSOR].gpio_pin = RIGHT_LINE_SENSOR_GPIO;
-  sensor_array[RIGHT_LINE_SENSOR].gpio_pin_2 =
+  sensor_array[BACK_RIGHT_LINE_SENSOR].gpio_pin = BACK_RIGHT_LINE_SENSOR_GPIO;
+  sensor_array[BACK_RIGHT_LINE_SENSOR].gpio_pin_2 =
       -1; // Not set only has one GPIO input for sensor
-  sensor_array[RIGHT_LINE_SENSOR].sensor_value = 0;
-  sensor_array[RIGHT_LINE_SENSOR].distance = -1;
+  sensor_array[BACK_RIGHT_LINE_SENSOR].sensor_value = 0;
+  sensor_array[BACK_RIGHT_LINE_SENSOR].distance = -1;
 
-  sensor_array[LEFT_LINE_SENSOR].gpio_pin = LEFT_LINE_SENSOR_GPIO;
-  sensor_array[LEFT_LINE_SENSOR].gpio_pin_2 =
+  sensor_array[FRONT_RIGHT_LINE_SENSOR].gpio_pin = FRONT_RIGHT_LINE_SENSOR_GPIO;
+  sensor_array[FRONT_RIGHT_LINE_SENSOR].gpio_pin_2 =
       -1; // Not set only has one GPIO input for sensor
-  sensor_array[LEFT_LINE_SENSOR].sensor_value = 0;
-  sensor_array[LEFT_LINE_SENSOR].distance = -1;
+  sensor_array[FRONT_RIGHT_LINE_SENSOR].sensor_value = 0;
+  sensor_array[FRONT_RIGHT_LINE_SENSOR].distance = -1;
+
+  sensor_array[BACK_LEFT_LINE_SENSOR].gpio_pin = BACK_LEFT_LINE_SENSOR_GPIO;
+  sensor_array[BACK_LEFT_LINE_SENSOR].gpio_pin_2 =
+      -1; // Not set only has one GPIO input for sensor
+  sensor_array[BACK_LEFT_LINE_SENSOR].sensor_value = 0;
+  sensor_array[BACK_LEFT_LINE_SENSOR].distance = -1;
+
+  sensor_array[FRONT_LEFT_LINE_SENSOR].gpio_pin = FRONT_LEFT_LINE_SENSOR_GPIO;
+  sensor_array[FRONT_LEFT_LINE_SENSOR].gpio_pin_2 =
+      -1; // Not set only has one GPIO input for sensor
+  sensor_array[FRONT_LEFT_LINE_SENSOR].sensor_value = 0;
+  sensor_array[FRONT_LEFT_LINE_SENSOR].distance = -1;
 
   sensor_array[FRONT_SONIC_SENSOR].gpio_pin = FSONIC_SENSOR_TRIG;
   sensor_array[FRONT_SONIC_SENSOR].gpio_pin_2 = FSONIC_SENSOR_ECHO;
@@ -116,7 +128,7 @@ double Read_Sonic_Sensor(sensor_info *sensor) {
   distance = (speed_of_sound * (stop - start)) / 2;
 
   // print value and keep going
-//  printf("distance: %.1f cm\n", distance);
+  //  printf("distance: %.1f cm\n", distance);
 
   return distance;
 }
