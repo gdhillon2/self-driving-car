@@ -36,13 +36,6 @@ void Run_Motor(motor_info *motor) {
   DEV_ModuleExit();
 }
 
-void Move_All_Motors(motor_info *motor_array) {
-  for (int i = 0; i < MOTOR_NUM; i++) {
-    Set_Direction(&motor_array[i], FORWARD);
-    Run_Motor(&motor_array[i]);
-  }
-}
-
 void Move_All_Forward(motor_info *motor_array) {
   for (int i = 0; i < MOTOR_NUM; i++) {
     (&motor_array[i])->speed = 100;
@@ -108,6 +101,18 @@ void Shift_Right(motor_info *motor_array) {
   Run_Motor(&motor_array[MOTOR_D]);
 }
 
+void Soft_Turn_Right(motor_info *motor_array) {
+  for (int i = 0; i < MOTOR_NUM; i++) {
+    Set_Direction(&motor_array[i], FORWARD);
+
+    if (i == MOTOR_A || i == MOTOR_D) {
+      (&motor_array[i])->speed = 100;
+    } else
+      (&motor_array[i])->speed = 50;
+    Run_Motor(&motor_array[i]);
+  }
+}
+
 void Turn_Right(motor_info *motor_array) {
 
   // sets direction of all motors to forward and sets power to 20% for motors
@@ -125,10 +130,19 @@ void Turn_Right(motor_info *motor_array) {
   }
 }
 
-void Turn_Left(motor_info *motor_array) {
+void Soft_Turn_Left(motor_info *motor_array) {
+  for (int i = 0; i < MOTOR_NUM; i++) {
+    Set_Direction(&motor_array[i], FORWARD);
 
-  // sets direction of all motors to forward and sets power to 20% for motors
-  // a and d
+    if (i == MOTOR_A || i == MOTOR_D) {
+      (&motor_array[i])->speed = 50;
+    } else
+      (&motor_array[i])->speed = 100;
+    Run_Motor(&motor_array[i]);
+  }
+}
+
+void Turn_Left(motor_info *motor_array) {
   for (int i = 0; i < MOTOR_NUM; i++) {
     Set_Direction(&motor_array[i], FORWARD);
 

@@ -108,9 +108,9 @@ int main() {
       printf("going back to regular line detection\n");
     } else if (!sensors[FRONT_RIGHT_LINE_SENSOR].sensor_value &&
                !sensors[FRONT_LEFT_LINE_SENSOR].sensor_value) {
-      Turn_Left(motors);
+      Soft_Turn_Left(motors);
     } else if (sensors[FRONT_RIGHT_LINE_SENSOR].sensor_value) {
-      Turn_Right(motors);
+      Soft_Turn_Right(motors);
     } else {
       Move_All_Forward(motors);
     }

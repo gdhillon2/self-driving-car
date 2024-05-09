@@ -45,7 +45,6 @@ void Init_Motor(motor_info *motor, unsigned int dir, uint16_t speed,
                 uint8_t pwm, uint8_t IN1, uint8_t IN2, uint8_t motorhat);
 void Run_Motor(motor_info *motor);
 void Stop_Motor(motor_info *motor);
-void Move_All_Motors(motor_info *motor);
 void Move_All_Forward(motor_info *motor_array);
 void Move_All_Backward(motor_info *motor_array);
 void Stop_All_Motors(motor_info *motor_array);
@@ -53,6 +52,8 @@ void Switch_Direction(motor_info *motor);
 void Set_Direction(motor_info *motor, unsigned int direction);
 void Shift_Left(motor_info *motor_array);
 void Shift_Right(motor_info *motor_array);
+void Soft_Turn_Right(motor_info *motor_array);
 void Turn_Right(motor_info *motor_array);
+void Soft_Turn_Left(motor_info *motor_array);
 void Turn_Left(motor_info *motor_array);
 #endif // MOTOR_CONTROLLER_H
