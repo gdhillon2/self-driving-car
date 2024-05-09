@@ -12,6 +12,15 @@
 #define FRONT_SONIC_SENSOR 4
 #define BACK_SONIC_SENSOR 5
 
+#define BACK_LEFT_LINE_SENSOR_GPIO 5
+#define FRONT_LEFT_LINE_SENSOR_GPIO 6
+#define FRONT_RIGHT_LINE_SENSOR_GPIO 27
+#define BACK_RIGHT_LINE_SENSOR_GPIO 17
+#define FSONIC_SENSOR_TRIG 21
+#define FSONIC_SENSOR_ECHO 20
+#define BSONIC_SENSOR_TRIG 23
+#define BSONIC_SENSOR_ECHO 24
+
 #define SENSOR_NUM 6
 
 // struct to be passed to the thread that contains
