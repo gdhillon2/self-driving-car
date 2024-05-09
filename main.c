@@ -129,7 +129,7 @@ int main() {
       while (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) && running) {
         Turn_Right(motors);
       }
-      hard_left_turn = 0;
+      hard_right_turn = 0;
     }
     else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Left(motors);
