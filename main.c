@@ -15,6 +15,28 @@ volatile sig_atomic_t running = 1;
 // terminates
 void sigintHandler() { running = 0; }
 
+int Create_Sensor_Threads(pthread_t thread[], void *sensor_struct) {
+  // we only go to SENSOR_NUM - 2 because the last two sensor structs are not
+  // threaded
+  for (int i = 0; i < SENSOR_NUM - 2; i++) {
+    if (pthread_create(&thread[i], NULL, Read_Sensor, &sensor_struct[i])) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
+int Join_Sensor_Threads(pthread_t thread[]) {
+  // we only go to SENSOR_NUM - 2 because the last two sensor structs are not
+  // threaded
+  for (int i = 0; i < SENSOR_NUM - 2; i++) {
+    if (pthread_join(thread[i], NULL)) {
+      return 1;
+    }
+  }
+  return 0;
+}
+
 int main() {
   sleep(1);
   printf("press ctrl+c to shut down\n");
@@ -28,12 +50,10 @@ int main() {
 
   // initialize the sensor structs
   // sensors is an ARRAY of sensor_info structs with a length of SENSOR_NUM
-  // SENSOR_NUM is a macro in SensorController.h that equals the total number of
-  // sensors on the car
-  // SensorController.h has macros for each index that specify which sensor that
-  // index belongs to
-  // RIGHT_LINE_SENSOR = 0, LEFT_LINE_SENSOR = 1,
-  // FRONT_IR_SENSOR = 2, SIDE_IR_SENSOR = 3
+  // SENSOR_NUM is a macro in SensorController.h that equals the total number
+  // of sensors on the car SensorController.h has macros for each index that
+  // specify which sensor that index belongs to RIGHT_LINE_SENSOR = 0,
+  // LEFT_LINE_SENSOR = 1, FRONT_IR_SENSOR = 2, SIDE_IR_SENSOR = 3
   sensor_info *sensors = Init_Sensors();
 
   // initialize the threads for each sensor
@@ -42,18 +62,9 @@ int main() {
   // please refer to the comment above or SensorController.h for the indices
   pthread_t threads[SENSOR_NUM];
 
-  // creates the LINE sensor threads and sends them the necessary structs
-  if (pthread_create(&threads[RIGHT_LINE_SENSOR], NULL, Read_Sensor,
-                     (void *)&sensors[RIGHT_LINE_SENSOR])) {
-    printf("failed to create right line sensor thread\n");
-    Free_Sensors(sensors);
-    return 1;
-  }
-
-  if (pthread_create(&threads[LEFT_LINE_SENSOR], NULL, Read_Sensor,
-                     (void *)&sensors[LEFT_LINE_SENSOR])) {
-    printf("failed to create left line sensor thread\n");
-    Free_Sensors(sensors);
+  int thread_create_check = Create_Sensor_Threads(threads, sensors);
+  if (thread_create_check) {
+    printf("failed to create all threads\n");
     return 1;
   }
 
@@ -61,19 +72,10 @@ int main() {
 
   while (running) {
     double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
-    printf("front sonic distance: %.1f\n", front_sonic_sensor);
-    // double side_sonic_sensor =
-    // Read_Sonic_Sensor(&sensors[SIDE_SONIC_SENSOR]);
+    // printf("front sonic distance: %.1f\n", front_sonic_sensor);
     double back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-    printf("back sonic distance: %.1f\n", back_sonic_sensor);
+    // printf("back sonic distance: %.1f\n", back_sonic_sensor);
     if (front_sonic_sensor <= 10.0) {
-      //    running = 0;
-      //    Shift_Left(motors);
-      //    sleep(1);
-      //    Move_All_Forward(motors);
-      //    sleep(1);
-      //    Shift_Right(motors);
-      //    sleep(1);
       while (front_sonic_sensor <= 15.0 && running) {
         Shift_Left(motors);
         front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
@@ -83,7 +85,6 @@ int main() {
       usleep(100000);
 
       while (back_sonic_sensor >= 40.0) {
-        // while(!sensors[SIDE_SONIC_SENSOR].sensor_value)
         Move_All_Forward(motors);
         back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
         printf("moving forward waiting to go past object\n");
@@ -96,46 +97,35 @@ int main() {
         printf("object has been sensed, moving forward to go past object\n");
       }
 
-
       while (back_sonic_sensor >= 40.0) {
         Shift_Right(motors);
         back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-        if (sensors[LEFT_LINE_SENSOR].sensor_value) {
+        if (sensors[FRONT_LEFT_LINE_SENSOR].sensor_value) {
           break;
         }
       }
 
       printf("going back to regular line detection\n");
-    }
-    //    if (sensors[RIGHT_LINE_SENSOR].sensor_value &&
-    //    sensors[LEFT_LINE_SENSOR].sensor_value) {
-    //      Move_All_Forward(motors);
-    //    }
-    else if (!sensors[RIGHT_LINE_SENSOR].sensor_value &&
-             !sensors[LEFT_LINE_SENSOR].sensor_value) {
+    } else if (!sensors[FRONT_RIGHT_LINE_SENSOR].sensor_value &&
+               !sensors[FRONT_LEFT_LINE_SENSOR].sensor_value) {
       Turn_Left(motors);
-    } else if (sensors[RIGHT_LINE_SENSOR].sensor_value) {
+    } else if (sensors[FRONT_RIGHT_LINE_SENSOR].sensor_value) {
       Turn_Right(motors);
-    }
-    // else if (sensors[LEFT_LINE_SENSOR].sensor_value) {
-    else {
+    } else {
       Move_All_Forward(motors);
     }
   }
   Stop_All_Motors(motors);
 
-  if (pthread_join(threads[RIGHT_LINE_SENSOR], NULL)) {
-    printf("failed to join right line sensor\n");
+  int thread_join_check = Join_Sensor_Threads(threads);
+  if (thread_join_check) {
+    printf("failed to join threads\n");
+    free(motors);
     Free_Sensors(sensors);
     return 1;
   }
 
-  if (pthread_join(threads[LEFT_LINE_SENSOR], NULL)) {
-    printf("failed to join left line sensor\n");
-    Free_Sensors(sensors);
-    return 1;
-  }
-  printf("\nshutting down\n");
+  printf("\nshutting down successfully\n");
   free(motors);
   Free_Sensors(sensors);
   return 0;
