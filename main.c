@@ -74,9 +74,12 @@ int main() {
   int hard_right_turn = 0;
   while (running) {
     usleep(1000);
+    printf("Gets in loop \n");
     double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
+    printf("Front Sonic Runs\n");
     // printf("front sonic distance: %.1f\n", front_sonic_sensor);
     double back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
+    printf("Back SOnic Runs\n");
     // printf("back sonic distance: %.1f\n", back_sonic_sensor);
     //    if (front_sonic_sensor <= 10.0) {
     //      while (front_sonic_sensor <= 15.0 && running) {
