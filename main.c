@@ -1,6 +1,5 @@
 #include "main.h"
 #include "lib/MotorController/MotorController.h"
-#include "lib/MotorTest/MotorTest.h"
 #include "lib/SensorController/SensorController.h"
 #include <pigpio.h>
 #include <pthread.h>
@@ -18,8 +17,9 @@ void sigintHandler() { running = 0; }
 int Create_Sensor_Threads(pthread_t thread[], void *sensor_struct) {
   // we only go to SENSOR_NUM - 2 because the last two sensor structs are not
   // threaded
+  sensor_info *sensor_data = sensor_struct;
   for (int i = 0; i < SENSOR_NUM - 2; i++) {
-    if (pthread_create(&thread[i], NULL, Read_Sensor, &sensor_struct[i])) {
+    if (pthread_create(&thread[i], NULL, Read_Sensor, &sensor_data[i])) {
       return 1;
     }
   }
