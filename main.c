@@ -118,9 +118,11 @@ int main() {
     //      printf("going back to regular line detection\n");
     //    }
     if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO)) {
+      printf("Hard Left ON!\n");
       hard_left_turn = 1;
       hard_right_turn = 0;
     } else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO)) {
+      printf("Hard Right ON!\n");
       hard_right_turn = 1;
       hard_left_turn = 0;
     }
@@ -133,6 +135,8 @@ int main() {
         Turn_Left(motors);
       }
 
+      printf("Exiting hard left\n");
+
       hard_left_turn = 0;
     } else if (hard_right_turn && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
                !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
@@ -144,6 +148,8 @@ int main() {
                gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
         Turn_Right(motors);
       }
+
+      printf("Exiting hard right\n");
 
       hard_right_turn = 0;
     } else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
