@@ -157,6 +157,9 @@ int main() {
       // left while the two front sensors cannot detect the line
       while (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
              !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && running) {
+        printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d",
+               gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO),
+               gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
         Turn_Left(motors);
       }
 
