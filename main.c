@@ -73,7 +73,6 @@ int main() {
   int hard_left_turn = 0;
   int hard_right_turn = 0;
   while (running) {
-    usleep(1000);
     printf("Gets in loop \n");
     // double front_sonic_sensor =
     // Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]); printf("Front Sonic
@@ -117,6 +116,27 @@ int main() {
     //
     //      printf("going back to regular line detection\n");
     //    }
+
+    // the general function of the line sensors is as follows:
+
+    // as long as the front 2 sensors are on the line, the car will continue to
+    // go forward no matter the back sensor inputs
+
+    // if a back sensor comes in contact with the line, it will "queue" a turn
+    // in the form of a flag so that the next time the front 2 sensors both fall
+    // off the line, it will hard turn until both front sensors go back on the
+    // line
+
+    // if only one of the front sensors falls off the line (irrespective of any
+    // turn flags) the car will soft turn back towards the line until both
+    // sensors are back on the line
+
+    // this if/else if block sets the turn flags and determines which direction
+    // to turn when a hard turn is initiated
+    // NOTE: this if/else if block does
+    // NOT initiate the turn, it ONLY sets what the next turn WILL be, the turn
+    // timing is determined when the 2 front sensors fall off the line in the
+    // following if/else if blocks
     if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO)) {
       printf("Hard Left ON!\n");
       hard_left_turn = 1;
@@ -127,38 +147,64 @@ int main() {
       hard_left_turn = 0;
     }
 
+    // this if statement determines a hard left turn, if the hard left turn flag
+    // is active and both front line sensors are off the line, a hard left turn
+    // is initiated until the front line sensors are back on the line, then the
+    // flag is set back to 0 to indicate the turn is complete
     if (hard_left_turn && !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
         !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
 
+      // this while loop prints out the front sensor values and turns the car
+      // left while the two front sensors cannot detect the line
       while (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
              !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && running) {
-        usleep(10000);
         Turn_Left(motors);
       }
 
       printf("Exiting hard left\n");
 
       hard_left_turn = 0;
-    } else if (hard_right_turn && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-               !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
+    }
+    // this else if statement determines a hard right turn, if the hard right
+    // turn flag is active and btoh front line sensors are off the line, a hard
+    // right turn is initiated until the front line sensors are back on the
+    // line, then the flag is set back to 0 to indicate the turn is complete
+    else if (hard_right_turn && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+             !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
 
+      // this while loop prints out the front sensor values and turns the car
+      // right while the two front sensors cannot detect the line
       while (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
              !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) && running) {
         printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d",
                gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO),
                gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
-        usleep(10000);
         Turn_Right(motors);
       }
 
       printf("Exiting hard right\n");
 
       hard_right_turn = 0;
-    } else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
+    }
+    // this else if statement determines a soft left turn, if the front right
+    // line sensor has fallen off the line but the front left one is still on
+    // the line, it will do a soft turn to adjust back on the line as this is
+    // considered a simple course correction rather than a turn on the course
+    else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
+             gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Left(motors);
-    } else if (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
+    }
+    // this else if statement determines a soft right turn, if the front right
+    // line sensor has fallen off the line but the front right one is still on
+    // the line, it will do a soft turn to adjust back on the line as this is
+    // considered a simple course correction rather than a turn on the course
+    else if (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+             gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Right(motors);
-    } else {
+    }
+    // if none of the above conditions are met, we can assume there is no reason
+    // to do anything other than simply move forward
+    else {
       Move_All_Forward(motors);
     }
   }
