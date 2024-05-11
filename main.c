@@ -158,6 +158,9 @@ int main() {
       // loop while the 2 front sensors are not on a line once the two sensors
       // are back on the line, we can exit this entire if block
       Turn_Left(motors);
+
+      // this while loop prints out the front sensor values while the car is
+      // turning
       while (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
              !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && running) {
         printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d",
@@ -181,8 +184,9 @@ int main() {
       // loop while the 2 front sensors are not on a line once the two sensors
       // are back on the line, we can exit this entire if block
       Turn_Right(motors);
-      // this while loop prints out the front sensor values and turns the car
-      // right while the two front sensors cannot detect the line
+
+      // this while loop prints out the front sensor values while the car is
+      // turning
       while (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
              !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) && running) {
         printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d",
