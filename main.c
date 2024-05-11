@@ -133,10 +133,9 @@ int main() {
 
     // this if/else if block sets the turn flags and determines which direction
     // to turn when a hard turn is initiated
-    // NOTE: this if/else if block does
-    // NOT initiate the turn, it ONLY sets what the next turn WILL be, the turn
-    // timing is determined when the 2 front sensors fall off the line in the
-    // following if/else if blocks
+    // NOTE: this if/else if block does NOT initiate the turn, it ONLY sets what
+    // the next turn WILL be, the turn timing is determined when the 2 front
+    // sensors fall off the line in the following if/else if blocks
     if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO)) {
       printf("Hard Left ON!\n");
       hard_left_turn = 1;
@@ -202,9 +201,9 @@ int main() {
              gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Right(motors);
     }
-    // if none of the above conditions are met, we can assume there is no reason
-    // to do anything other than simply move forward
-    else {
+    // if both front line sensors read the line, move the car forward
+    else if (gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+             gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Move_All_Forward(motors);
     }
   }
