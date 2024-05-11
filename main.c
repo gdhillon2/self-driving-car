@@ -146,7 +146,7 @@ int main() {
       hard_left_turn = 0;
     }
 
-    // this if statement determines a hard left turn, if the hard left turn flag
+    // this if block determines a hard left turn, if the hard left turn flag
     // is active and both front line sensors are off the line, a hard left turn
     // is initiated until the front line sensors are back on the line, then the
     // flag is set back to 0 to indicate the turn is complete
@@ -167,8 +167,8 @@ int main() {
 
       hard_left_turn = 0;
     }
-    // this else if statement determines a hard right turn, if the hard right
-    // turn flag is active and btoh front line sensors are off the line, a hard
+    // this else if block determines a hard right turn, if the hard right
+    // turn flag is active and both front line sensors are off the line, a hard
     // right turn is initiated until the front line sensors are back on the
     // line, then the flag is set back to 0 to indicate the turn is complete
     else if (hard_right_turn && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
@@ -188,18 +188,18 @@ int main() {
 
       hard_right_turn = 0;
     }
-    // this else if statement determines a soft left turn, if the front right
+    // this else if block determines a soft left turn, if the front right
     // line sensor has fallen off the line but the front left one is still on
     // the line, it will do a soft turn to adjust back on the line as this is
-    // considered a simple course correction rather than a turn on the course
+    // considered a simple correction rather than a turn on the course
     else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
              gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Left(motors);
     }
-    // this else if statement determines a soft right turn, if the front right
+    // this else if block determines a soft right turn, if the front right
     // line sensor has fallen off the line but the front right one is still on
     // the line, it will do a soft turn to adjust back on the line as this is
-    // considered a simple course correction rather than a turn on the course
+    // considered a simple correction rather than a turn on the course
     else if (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
              gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Right(motors);
