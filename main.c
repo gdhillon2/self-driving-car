@@ -142,8 +142,8 @@ int main() {
       hard_right_turn = 0;
     } else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO)) {
       printf("Hard Right ON!\n");
-      hard_right_turn = 1;
       hard_left_turn = 0;
+      hard_right_turn = 1;
     }
 
     // this if block determines a hard left turn, if the hard left turn flag
@@ -162,9 +162,9 @@ int main() {
 
       // this while loop prints out the front sensor values while the car is
       // turning
-      while (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
-             !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && running) {
-        printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d",
+      while ((!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) ||
+             !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) && running) {
+        printf("gpioRead FRONT LEFT: %d\tgpioRead FRONT RIGHT: %d\n",
                gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO),
                gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
       }
@@ -189,9 +189,9 @@ int main() {
 
       // this while loop prints out the front sensor values while the car is
       // turning
-      while (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-             !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) && running) {
-        printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d",
+      while ((!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) ||
+             !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) && running) {
+        printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d\n",
                gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO),
                gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
       }
