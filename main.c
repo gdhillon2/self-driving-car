@@ -167,6 +167,7 @@ int main()
       hard_right_turn = 1;
     }
 
+    // if a turn has been sensed, slow the car down until it finishes the turn
     if (hard_left_turn || hard_right_turn) {
       speed = 55;
     }
