@@ -74,12 +74,13 @@ int main() {
   int hard_right_turn = 0;
   while (running) {
     printf("Gets in loop \n");
-    // double front_sonic_sensor =
-    // Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]); printf("Front Sonic
-    // Runs\n"); printf("front sonic distance: %.1f\n", front_sonic_sensor);
-    // double back_sonic_sensor =
-    // Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); printf("Back SOnic
-    // Runs\n"); printf("back sonic distance: %.1f\n", back_sonic_sensor);
+    usleep(10000);
+    double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
+    printf("Front Sonic Runs\n");
+    printf("front sonic distance: %.1f\n", front_sonic_sensor);
+    double back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
+    printf("Back Sonic Runs\n");
+    printf("back sonic distance: %.1f\n", back_sonic_sensor);
     //    if (front_sonic_sensor <= 10.0) {
     //      while (front_sonic_sensor <= 15.0 && running) {
     //        Shift_Left(motors);
@@ -164,9 +165,7 @@ int main() {
       // turning
       while ((!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) ||
              !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) && running) {
-        printf("gpioRead FRONT LEFT: %d\tgpioRead FRONT RIGHT: %d\n",
-               gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO),
-               gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
+        usleep(10000);
       }
 
       printf("Exiting hard left\n");
@@ -191,9 +190,7 @@ int main() {
       // turning
       while ((!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) ||
              !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) && running) {
-        printf("gpioRead FRONT LEFT: %d\ngpioRead FRONT RIGHT: %d\n",
-               gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO),
-               gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO));
+        usleep(10000);
       }
 
       printf("Exiting hard right\n");
