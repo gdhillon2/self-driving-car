@@ -72,7 +72,7 @@ int main() {
 
   int hard_left_turn = 0;
   int hard_right_turn = 0;
-  int speed;
+  int speed = 100;
 
   int back_sonic_sensor_threshold = 20.0;
   while (running) {
@@ -163,13 +163,13 @@ int main() {
     }
 
     // if a turn has been sensed, slow the car down until it finishes the turn
-    if (hard_left_turn || hard_right_turn) {
-      printf("Sets speed to 50\n");
-      speed = 55;
-    } else {
-      printf("Resets to speed 100\n");
-      speed = 100;
-    }
+    // if (hard_left_turn || hard_right_turn) {
+    //   printf("Sets speed to 50\n");
+    //   speed = 55;
+    // } else {
+    //   printf("Resets to speed 100\n");
+    //   speed = 100;
+    // }
 
     // this if block determines a hard left turn, if the hard left turn flag
     // is active and both front line sensors are off the line, a hard left turn
