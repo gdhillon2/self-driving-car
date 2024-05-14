@@ -36,6 +36,14 @@ void Run_Motor(motor_info *motor) {
   DEV_ModuleExit();
 }
 
+void Move_All_Forward_Set_Speed(motor_info *motor_array, int speed) {
+  for (int i = 0; i < MOTOR_NUM; i++) {
+    (&motor_array[i])->speed = speed;
+    Set_Direction(&motor_array[i], FORWARD);
+    Run_Motor(&motor_array[i]);
+  }
+}
+
 void Move_All_Forward(motor_info *motor_array) {
   for (int i = 0; i < MOTOR_NUM; i++) {
     (&motor_array[i])->speed = 100;

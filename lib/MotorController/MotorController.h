@@ -46,6 +46,7 @@ void Init_Motor(motor_info *motor, unsigned int dir, uint16_t speed,
 void Run_Motor(motor_info *motor);
 void Stop_Motor(motor_info *motor);
 void Move_All_Forward(motor_info *motor_array);
+void Move_All_Forward_Set_Speed(motor_info *motor_array, int speed);
 void Move_All_Backward(motor_info *motor_array);
 void Stop_All_Motors(motor_info *motor_array);
 void Switch_Direction(motor_info *motor);
