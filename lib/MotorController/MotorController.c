@@ -82,6 +82,10 @@ void Shift_Left(motor_info *motor_array) {
   Set_Direction(&motor_array[MOTOR_C], BACKWARD);
   Set_Direction(&motor_array[MOTOR_D], FORWARD);
 
+  for(int i = 0; i < MOTOR_NUM; i++) {
+    (&motor_array[i])->speed = 100;
+  }
+
   Run_Motor(&motor_array[MOTOR_A]);
   Run_Motor(&motor_array[MOTOR_B]);
   Run_Motor(&motor_array[MOTOR_C]);
@@ -94,6 +98,10 @@ void Shift_Right(motor_info *motor_array) {
   Set_Direction(&motor_array[MOTOR_B], BACKWARD);
   Set_Direction(&motor_array[MOTOR_C], FORWARD);
   Set_Direction(&motor_array[MOTOR_D], BACKWARD);
+
+  for(int i = 0; i < MOTOR_NUM; i++) {
+    (&motor_array[i])->speed = 100;
+  }
 
   Run_Motor(&motor_array[MOTOR_A]);
   Run_Motor(&motor_array[MOTOR_B]);
