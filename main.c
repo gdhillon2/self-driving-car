@@ -75,12 +75,12 @@ int main() {
   while (running) {
     printf("Gets in loop \n");
     usleep(10000);
-    double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
-    printf("Front Sonic Runs\n");
-    printf("front sonic distance: %.1f\n", front_sonic_sensor);
-    double back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-    printf("Back Sonic Runs\n");
-    printf("back sonic distance: %.1f\n", back_sonic_sensor);
+//    double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
+//    printf("Front Sonic Runs\n");
+//    printf("front sonic distance: %.1f\n", front_sonic_sensor);
+//    double back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
+//    printf("Back Sonic Runs\n");
+//    printf("back sonic distance: %.1f\n", back_sonic_sensor);
     //    if (front_sonic_sensor <= 10.0) {
     //      while (front_sonic_sensor <= 15.0 && running) {
     //        Shift_Left(motors);
