@@ -253,7 +253,9 @@ int main()
     {
       Soft_Turn_Right(motors);
     }
-    // if both front line sensors read the line, move the car forward
+    // if both front line sensors read the line, move the car forward,
+    // the speed is 55 if a turn has been sensed and 100 if a turn has
+    // not been sensed
     else if (gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
              gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO))
     {
