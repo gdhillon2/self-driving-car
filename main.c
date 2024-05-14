@@ -14,37 +14,30 @@ volatile sig_atomic_t running = 1;
 // terminates
 void sigintHandler() { running = 0; }
 
-int Create_Sensor_Threads(pthread_t thread[], void *sensor_struct)
-{
+int Create_Sensor_Threads(pthread_t thread[], void *sensor_struct) {
   // we only go to SENSOR_NUM - 2 because the last two sensor structs are not
   // threaded
   sensor_info *sensor_data = sensor_struct;
-  for (int i = 0; i < SENSOR_NUM - 2; i++)
-  {
-    if (pthread_create(&thread[i], NULL, Read_Sensor, &sensor_data[i]))
-    {
+  for (int i = 0; i < SENSOR_NUM - 2; i++) {
+    if (pthread_create(&thread[i], NULL, Read_Sensor, &sensor_data[i])) {
       return 1;
     }
   }
   return 0;
 }
 
-int Join_Sensor_Threads(pthread_t thread[])
-{
+int Join_Sensor_Threads(pthread_t thread[]) {
   // we only go to SENSOR_NUM - 2 because the last two sensor structs are not
   // threaded
-  for (int i = 0; i < SENSOR_NUM - 2; i++)
-  {
-    if (pthread_join(thread[i], NULL))
-    {
+  for (int i = 0; i < SENSOR_NUM - 2; i++) {
+    if (pthread_join(thread[i], NULL)) {
       return 1;
     }
   }
   return 0;
 }
 
-int main()
-{
+int main() {
   sleep(1);
   printf("press ctrl+c to shut down\n");
   // initialize the motor information structures
@@ -82,58 +75,63 @@ int main()
   int speed;
 
   int back_sonic_sensor_threshold = 20.0;
-  while (running)
-  {
-    //usleep(10000);
-//    double front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
-//    printf("Front Sonic Runs\n");
-//    printf("front sonic distance: %.1f\n", front_sonic_sensor);
-//    double back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-//    printf("Back Sonic Runs\n");
-//    printf("back sonic distance: %.1f\n", back_sonic_sensor);
-//    if (front_sonic_sensor <= 10.0)
-//    {
-//      while (front_sonic_sensor <= 15.0 && running)
-//      {
-//        Shift_Left(motors);
-//        front_sonic_sensor = Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]);
-//        printf("shifting left to avoid object\n");
-//      }
-//
-//      /***********************************************************************
-//      * THIS VALUE NEEDS TO BE ADJUSTED BASED ON HOW MUCH POWER IS GOING INTO
-//      * THE CAR
-//      * THE CURRENT VALUE ASSUMES NO MOTORHATS ARE PROVIDING POWER
-//      ***********************************************************************/
-//      usleep(850000);
-//
-//      while (back_sonic_sensor >= back_sonic_sensor_threshold)
-//      {
-//        Move_All_Forward(motors);
-//        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-//        printf("moving forward waiting to go past object\n");
-//      }
-//
-//      while (back_sonic_sensor < back_sonic_sensor_threshold)
-//      {
-//        printf("%d\n", back_sonic_sensor);
-//        Move_All_Forward(motors);
-//        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-//        printf("object has been sensed, moving forward to go past object\n");
-//      }
-//
-//      while (back_sonic_sensor >= back_sonic_sensor_threshold)
-//      {
-//        Shift_Right(motors);
-//        back_sonic_sensor = Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]);
-//        if (gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) && gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO))
-//        {
-//          break;
-//        }
-//      }
-//
-//      printf("going back to regular line detection\n");
-//    }
+  while (running) {
+    // usleep(10000);
+    //    double front_sonic_sensor =
+    //    Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]); printf("Front Sonic
+    //    Runs\n"); printf("front sonic distance: %.1f\n", front_sonic_sensor);
+    //    double back_sonic_sensor =
+    //    Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); printf("Back Sonic
+    //    Runs\n"); printf("back sonic distance: %.1f\n", back_sonic_sensor); if
+    //    (front_sonic_sensor <= 10.0)
+    //    {
+    //      while (front_sonic_sensor <= 15.0 && running)
+    //      {
+    //        Shift_Left(motors);
+    //        front_sonic_sensor =
+    //        Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]); printf("shifting
+    //        left to avoid object\n");
+    //      }
+    //
+    //      /***********************************************************************
+    //      * THIS VALUE NEEDS TO BE ADJUSTED BASED ON HOW MUCH POWER IS GOING
+    //      INTO
+    //      * THE CAR
+    //      * THE CURRENT VALUE ASSUMES NO MOTORHATS ARE PROVIDING POWER
+    //      ***********************************************************************/
+    //      usleep(850000);
+    //
+    //      while (back_sonic_sensor >= back_sonic_sensor_threshold)
+    //      {
+    //        Move_All_Forward(motors);
+    //        back_sonic_sensor =
+    //        Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); printf("moving
+    //        forward waiting to go past object\n");
+    //      }
+    //
+    //      while (back_sonic_sensor < back_sonic_sensor_threshold)
+    //      {
+    //        printf("%d\n", back_sonic_sensor);
+    //        Move_All_Forward(motors);
+    //        back_sonic_sensor =
+    //        Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); printf("object has
+    //        been sensed, moving forward to go past object\n");
+    //      }
+    //
+    //      while (back_sonic_sensor >= back_sonic_sensor_threshold)
+    //      {
+    //        Shift_Right(motors);
+    //        back_sonic_sensor =
+    //        Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); if
+    //        (gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+    //        gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO))
+    //        {
+    //          break;
+    //        }
+    //      }
+    //
+    //      printf("going back to regular line detection\n");
+    //    }
 
     // the general function of the line sensors is as follows:
 
@@ -154,14 +152,11 @@ int main()
     // NOTE: this if/else if block does NOT initiate the turn, it ONLY sets what
     // the next turn WILL be, the turn timing is determined when the 2 front
     // sensors fall off the line in the following if/else if blocks
-    if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO))
-    {
+    if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO)) {
       printf("Hard Left ON!\n");
       hard_left_turn = 1;
       hard_right_turn = 0;
-    }
-    else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO))
-    {
+    } else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO)) {
       printf("Hard Right ON!\n");
       hard_left_turn = 0;
       hard_right_turn = 1;
@@ -169,9 +164,10 @@ int main()
 
     // if a turn has been sensed, slow the car down until it finishes the turn
     if (hard_left_turn || hard_right_turn) {
+      printf("Sets speed to 50\n");
       speed = 55;
-    }
-    else {
+    } else {
+      printf("Resets to speed 100\n");
       speed = 100;
     }
 
@@ -180,8 +176,7 @@ int main()
     // is initiated until the front line sensors are back on the line, then the
     // flag is set back to 0 to indicate the turn is complete
     if (hard_left_turn && !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
-        !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO))
-    {
+        !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
 
       // Turn_Left turns the car left until another MotorController function is
       // called
@@ -194,8 +189,7 @@ int main()
       // turning
       while ((!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) ||
               !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) &&
-             running)
-      {
+             running) {
         if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO)) {
           break;
         }
@@ -210,8 +204,7 @@ int main()
     // right turn is initiated until the front line sensors are back on the
     // line, then the flag is set back to 0 to indicate the turn is complete
     else if (hard_right_turn && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-             !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO))
-    {
+             !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
 
       // Turn_Right turns the car left until another MotorController function is
       // called
@@ -224,8 +217,7 @@ int main()
       // turning
       while ((!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) ||
               !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) &&
-             running)
-      {
+             running) {
         if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO)) {
           break;
         }
@@ -240,8 +232,7 @@ int main()
     // the line, it will do a soft turn to adjust back on the line as this is
     // considered a simple correction rather than a turn on the course
     else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
-             gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO))
-    {
+             gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Left(motors);
     }
     // this else if block determines a soft right turn, if the front right
@@ -249,16 +240,14 @@ int main()
     // the line, it will do a soft turn to adjust back on the line as this is
     // considered a simple correction rather than a turn on the course
     else if (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-             gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO))
-    {
+             gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Right(motors);
     }
     // if both front line sensors read the line, move the car forward,
     // the speed is 55 if a turn has been sensed and 100 if a turn has
     // not been sensed
     else if (gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-             gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO))
-    {
+             gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Move_All_Forward_Set_Speed(motors, speed);
     }
   }
