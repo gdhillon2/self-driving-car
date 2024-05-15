@@ -26,6 +26,35 @@ int Create_Sensor_Threads(pthread_t thread[], void *sensor_struct) {
   return 0;
 }
 
+#define DEBOUNCE_READS 5
+
+int debounceRead(int pin) {
+  int reads[DEBOUNCE_READS];
+  int i, high = 0, low = 0;
+
+  // Read the pin DEBOUNCE_READS times with a delay of DEBOUNCE_TIME between
+  // each read
+  for (i = 0; i < DEBOUNCE_READS; i++) {
+    reads[i] = debounceRead(pin);
+    usleep(1000);
+  }
+
+  // Count the number of high and low reads
+  for (i = 0; i < DEBOUNCE_READS; i++) {
+    if (reads[i] == 1) {
+      high++;
+    } else {
+      low++;
+    }
+  }
+
+  // Return the majority
+  if (high > low) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
 int Join_Sensor_Threads(pthread_t thread[]) {
   // we only go to SENSOR_NUM - 2 because the last two sensor structs are not
   // threaded
@@ -36,7 +65,6 @@ int Join_Sensor_Threads(pthread_t thread[]) {
   }
   return 0;
 }
-
 int main() {
   sleep(1);
   printf("press ctrl+c to shut down\n");
@@ -123,8 +151,8 @@ int main() {
     //        Shift_Right(motors);
     //        back_sonic_sensor =
     //        Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); if
-    //        (gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-    //        gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO))
+    //        (debounceRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+    //        debounceRead(FRONT_RIGHT_LINE_SENSOR_GPIO))
     //        {
     //          break;
     //        }
@@ -152,31 +180,31 @@ int main() {
     // NOTE: this if/else if block does NOT initiate the turn, it ONLY sets what
     // the next turn WILL be, the turn timing is determined when the 2 front
     // sensors fall off the line in the following if/else if blocks
-    if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO) && !hard_right_turn) {
+    if (debounceRead(BACK_LEFT_LINE_SENSOR_GPIO) && !hard_right_turn) {
       printf("Hard Left ON!\n");
       hard_left_turn = 1;
       hard_right_turn = 0;
-    } else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO) && !hard_left_turn) {
+    } else if (debounceRead(BACK_RIGHT_LINE_SENSOR_GPIO) && !hard_left_turn) {
       printf("Hard Right ON!\n");
       hard_left_turn = 0;
       hard_right_turn = 1;
     }
 
-     // if a turn has been sensed, slow the car down until it finishes the turn
-//     if (hard_left_turn || hard_right_turn) {
-//       printf("Sets speed to 75\n");
-//       speed = 75;
-//     } else {
-//       printf("Resets to speed 100\n");
-//       speed = 100;
-//     }
+    // if a turn has been sensed, slow the car down until it finishes the turn
+    //     if (hard_left_turn || hard_right_turn) {
+    //       printf("Sets speed to 75\n");
+    //       speed = 75;
+    //     } else {
+    //       printf("Resets to speed 100\n");
+    //       speed = 100;
+    //     }
 
     // this if block determines a hard left turn, if the hard left turn flag
     // is active and both front line sensors are off the line, a hard left turn
     // is initiated until the front line sensors are back on the line, then the
     // flag is set back to 0 to indicate the turn is complete
-    if (hard_left_turn && !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
-        !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
+    if (hard_left_turn && !debounceRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
+        !debounceRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
 
       // Turn_Left turns the car left until another MotorController function is
       // called
@@ -187,8 +215,8 @@ int main() {
 
       // this while loop prints out the front sensor values while the car is
       // turning
-      while ((!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) ||
-              !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) &&
+      while ((!debounceRead(FRONT_RIGHT_LINE_SENSOR_GPIO) ||
+              !debounceRead(FRONT_LEFT_LINE_SENSOR_GPIO)) &&
              running) {
       }
 
@@ -200,8 +228,8 @@ int main() {
     // turn flag is active and both front line sensors are off the line, a hard
     // right turn is initiated until the front line sensors are back on the
     // line, then the flag is set back to 0 to indicate the turn is complete
-    else if (hard_right_turn && !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-             !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
+    else if (hard_right_turn && !debounceRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+             !debounceRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
 
       // Turn_Right turns the car left until another MotorController function is
       // called
@@ -212,8 +240,8 @@ int main() {
 
       // this while loop prints out the front sensor values while the car is
       // turning
-      while ((!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) ||
-              !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) &&
+      while ((!debounceRead(FRONT_LEFT_LINE_SENSOR_GPIO) ||
+              !debounceRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) &&
              running) {
       }
 
@@ -225,32 +253,32 @@ int main() {
     // line sensor has fallen off the line but the front left one is still on
     // the line, it will do a soft turn to adjust back on the line as this is
     // considered a simple correction rather than a turn on the course
-    else if (!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
-             gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
+    else if (!debounceRead(FRONT_RIGHT_LINE_SENSOR_GPIO) &&
+             debounceRead(FRONT_LEFT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Left(motors);
     }
     // this else if block determines a soft right turn, if the front right
     // line sensor has fallen off the line but the front right one is still on
     // the line, it will do a soft turn to adjust back on the line as this is
     // considered a simple correction rather than a turn on the course
-    else if (!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-             gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
+    else if (!debounceRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+             debounceRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Soft_Turn_Right(motors);
     }
     // if both front line sensors read the line, move the car forward,
     // the speed is 55 if a turn has been sensed and 100 if a turn has
     // not been sensed
-    else if (gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
-             gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
+    else if (debounceRead(FRONT_LEFT_LINE_SENSOR_GPIO) &&
+             debounceRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) {
       Move_All_Forward_Set_Speed(motors, speed);
     }
   }
   printf("exiting running loop\n");
   Stop_All_Motors(motors);
 
-//  Shift_Left(motors);
-//  sleep(3);
-//  Stop_All_Motors(motors);
+  //  Shift_Left(motors);
+  //  sleep(3);
+  //  Stop_All_Motors(motors);
   //  int thread_join_check = Join_Sensor_Threads(threads);
   //  if (thread_join_check) {
   //    printf("failed to join threads\n");
