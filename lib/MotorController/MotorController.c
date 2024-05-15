@@ -124,7 +124,7 @@ void Soft_Turn_Right(motor_info *motor_array) {
     if (i == MOTOR_A || i == MOTOR_D) {
       (&motor_array[i])->speed = 100;
     } else
-      (&motor_array[i])->speed = 40;
+      (&motor_array[i])->speed = 20;
     Run_Motor(&motor_array[i]);
   }
 }
@@ -151,7 +151,7 @@ void Soft_Turn_Left(motor_info *motor_array) {
     Set_Direction(&motor_array[i], FORWARD);
 
     if (i == MOTOR_A || i == MOTOR_D) {
-      (&motor_array[i])->speed = 40;
+      (&motor_array[i])->speed = 20;
     } else
       (&motor_array[i])->speed = 100;
     Run_Motor(&motor_array[i]);
