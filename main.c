@@ -152,24 +152,24 @@ int main() {
     // NOTE: this if/else if block does NOT initiate the turn, it ONLY sets what
     // the next turn WILL be, the turn timing is determined when the 2 front
     // sensors fall off the line in the following if/else if blocks
-    if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO)) {
+    if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO) && !hard_right_turn) {
       printf("Hard Left ON!\n");
       hard_left_turn = 1;
       hard_right_turn = 0;
-    } else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO)) {
+    } else if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO) && !hard_left_turn) {
       printf("Hard Right ON!\n");
       hard_left_turn = 0;
       hard_right_turn = 1;
     }
 
-    // if a turn has been sensed, slow the car down until it finishes the turn
-    // if (hard_left_turn || hard_right_turn) {
-    //   printf("Sets speed to 50\n");
-    //   speed = 55;
-    // } else {
-    //   printf("Resets to speed 100\n");
-    //   speed = 100;
-    // }
+     // if a turn has been sensed, slow the car down until it finishes the turn
+//     if (hard_left_turn || hard_right_turn) {
+//       printf("Sets speed to 75\n");
+//       speed = 75;
+//     } else {
+//       printf("Resets to speed 100\n");
+//       speed = 100;
+//     }
 
     // this if block determines a hard left turn, if the hard left turn flag
     // is active and both front line sensors are off the line, a hard left turn
@@ -190,9 +190,6 @@ int main() {
       while ((!gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO) ||
               !gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO)) &&
              running) {
-        if (gpioRead(BACK_RIGHT_LINE_SENSOR_GPIO)) {
-          break;
-        }
       }
 
       printf("Exiting hard left\n");
@@ -218,9 +215,6 @@ int main() {
       while ((!gpioRead(FRONT_LEFT_LINE_SENSOR_GPIO) ||
               !gpioRead(FRONT_RIGHT_LINE_SENSOR_GPIO)) &&
              running) {
-        if (gpioRead(BACK_LEFT_LINE_SENSOR_GPIO)) {
-          break;
-        }
       }
 
       printf("Exiting hard right\n");
@@ -254,6 +248,9 @@ int main() {
   printf("exiting running loop\n");
   Stop_All_Motors(motors);
 
+//  Shift_Left(motors);
+//  sleep(3);
+//  Stop_All_Motors(motors);
   //  int thread_join_check = Join_Sensor_Threads(threads);
   //  if (thread_join_check) {
   //    printf("failed to join threads\n");
