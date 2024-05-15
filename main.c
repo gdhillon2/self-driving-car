@@ -27,7 +27,6 @@ int Create_Sensor_Threads(pthread_t thread[], void *sensor_struct) {
 }
 
 #define DEBOUNCE_READS 5
-
 int debounceRead(int pin) {
   int reads[DEBOUNCE_READS];
   int i, high = 0, low = 0;
@@ -35,7 +34,7 @@ int debounceRead(int pin) {
   // Read the pin DEBOUNCE_READS times with a delay of DEBOUNCE_TIME between
   // each read
   for (i = 0; i < DEBOUNCE_READS; i++) {
-    reads[i] = debounceRead(pin);
+    reads[i] = gpioRead(pin);
     usleep(1000);
   }
 
@@ -55,6 +54,7 @@ int debounceRead(int pin) {
     return 0;
   }
 }
+
 int Join_Sensor_Threads(pthread_t thread[]) {
   // we only go to SENSOR_NUM - 2 because the last two sensor structs are not
   // threaded
