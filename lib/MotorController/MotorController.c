@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#define MAX_SPEED 100
+
 void Init_Motorhat(uint8_t motorhat) {
   PCA9685_Init(motorhat);
   PCA9685_SetPWMFreq(100);
@@ -21,7 +23,7 @@ void Run_Motor(motor_info *motor) {
   Init_Motorhat(motor->motorhat);
   // 100 is max speed
   if (motor->speed > 100) {
-    motor->speed = 100;
+    motor->speed = MAX_SPEED;
   }
 
   PCA9685_SetPwmDutyCycle(motor->pwm, motor->speed);
@@ -46,7 +48,7 @@ void Move_All_Forward_Set_Speed(motor_info *motor_array, int speed) {
 
 void Move_All_Forward(motor_info *motor_array) {
   for (int i = 0; i < MOTOR_NUM; i++) {
-    (&motor_array[i])->speed = 100;
+    (&motor_array[i])->speed = MAX_SPEED;
     Set_Direction(&motor_array[i], FORWARD);
     Run_Motor(&motor_array[i]);
   }
@@ -54,7 +56,7 @@ void Move_All_Forward(motor_info *motor_array) {
 
 void Move_All_Backward(motor_info *motor_array) {
   for (int i = 0; i < MOTOR_NUM; i++) {
-    (&motor_array[i])->speed = 100;
+    (&motor_array[i])->speed = MAX_SPEED;
     Set_Direction(&motor_array[i], BACKWARD);
     Run_Motor(&motor_array[i]);
   }
@@ -91,7 +93,7 @@ void Shift_Left(motor_info *motor_array) {
   Set_Direction(&motor_array[MOTOR_D], FORWARD);
 
   for(int i = 0; i < MOTOR_NUM; i++) {
-    (&motor_array[i])->speed = 100;
+    (&motor_array[i])->speed = MAX_SPEED;
   }
 
   Run_Motor(&motor_array[MOTOR_A]);
@@ -108,7 +110,7 @@ void Shift_Right(motor_info *motor_array) {
   Set_Direction(&motor_array[MOTOR_D], BACKWARD);
 
   for(int i = 0; i < MOTOR_NUM; i++) {
-    (&motor_array[i])->speed = 100;
+    (&motor_array[i])->speed = MAX_SPEED;
   }
 
   Run_Motor(&motor_array[MOTOR_A]);
@@ -122,7 +124,7 @@ void Soft_Turn_Right(motor_info *motor_array) {
     Set_Direction(&motor_array[i], FORWARD);
 
     if (i == MOTOR_A || i == MOTOR_D) {
-      (&motor_array[i])->speed = 100;
+      (&motor_array[i])->speed = MAX_SPEED;
     } else
       (&motor_array[i])->speed = 20;
     Run_Motor(&motor_array[i]);
@@ -153,7 +155,7 @@ void Soft_Turn_Left(motor_info *motor_array) {
     if (i == MOTOR_A || i == MOTOR_D) {
       (&motor_array[i])->speed = 20;
     } else
-      (&motor_array[i])->speed = 100;
+      (&motor_array[i])->speed = MAX_SPEED;
     Run_Motor(&motor_array[i]);
   }
 }
