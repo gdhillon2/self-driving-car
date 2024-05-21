@@ -126,6 +126,7 @@ int main() {
             front_sonic_sensor =
             Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]); 
 	    printf("shifting left to avoid object\n");
+          usleep(10000);
           }
     
     //      /***********************************************************************
@@ -143,6 +144,7 @@ int main() {
             Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); 
         printf("back sonic distance: %.1f\n", back_sonic_sensor); 
 	    printf("moving forward waiting to go past object\n");
+          usleep(10000);
           }
     
           while (back_sonic_sensor <= back_sonic_sensor_threshold)
@@ -152,6 +154,7 @@ int main() {
             Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); 
         printf("back sonic distance: %.1f\n", back_sonic_sensor); 
 	    printf("object has been sensed, moving forward to go past object\n");
+          usleep(10000);
           }
     
           while (back_sonic_sensor >= back_sonic_sensor_threshold)
