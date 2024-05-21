@@ -109,7 +109,9 @@ int main() {
   int hard_right_turn = 0;
   int speed = 100;
 
-  int back_sonic_sensor_threshold = 20.0;
+  float initial_front_sonic_threshold = 30.0;
+  float front_sonic_threshold = 35.0;
+  float back_sonic_sensor_threshold = 20.0;
   while (running) {
 //     usleep(10000);
         double front_sonic_sensor =
@@ -118,10 +120,12 @@ int main() {
         double back_sonic_sensor =
         Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); 
         printf("back sonic distance: %.1f\n", back_sonic_sensor); 
-	if(front_sonic_sensor <= 10.0)
+	if(front_sonic_sensor <= initial_front_sonic_threshold)
         {
-          while (front_sonic_sensor <= 20.0 && running)
+          printf("we're in obstacle avoidance\n");
+          while (front_sonic_sensor <= back_sonic_sensor_threshold && running)
           {
+        printf("front sonic distance: %.1f\n", Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]));
             Shift_Left(motors);
             front_sonic_sensor =
             Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]); 
@@ -139,6 +143,7 @@ int main() {
     
           while (back_sonic_sensor >= back_sonic_sensor_threshold)
           {
+        printf("front sonic distance: %.1f\n", Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]));
             Move_All_Forward(motors);
             back_sonic_sensor =
             Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); 
@@ -149,6 +154,7 @@ int main() {
     
           while (back_sonic_sensor <= back_sonic_sensor_threshold)
           {
+        printf("front sonic distance: %.1f\n", Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]));
             Move_All_Forward(motors);
             back_sonic_sensor =
             Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); 
@@ -159,6 +165,7 @@ int main() {
     
           while (back_sonic_sensor >= back_sonic_sensor_threshold)
           {
+        printf("front sonic distance: %.1f\n", Read_Sonic_Sensor(&sensors[FRONT_SONIC_SENSOR]));
             Shift_Right(motors);
             back_sonic_sensor =
             Read_Sonic_Sensor(&sensors[BACK_SONIC_SENSOR]); 
