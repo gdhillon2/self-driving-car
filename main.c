@@ -66,7 +66,8 @@ int Join_Sensor_Threads(pthread_t thread[]) {
   return 0;
 }
 int main() {
-  sleep(1);
+  
+  printf("press the button to start the engines\n");
   printf("press ctrl+c to shut down\n");
   // initialize the motor information structures
   motor_info *motors = malloc(sizeof(motor_info) * MOTOR_NUM);
@@ -82,7 +83,13 @@ int main() {
   // of sensors on the car SensorController.h has macros for each index that
   // specify which sensor that index belongs to RIGHT_LINE_SENSOR = 0,
   // LEFT_LINE_SENSOR = 1, FRONT_IR_SENSOR = 2, SIDE_IR_SENSOR = 3
+  
   sensor_info *sensors = Init_Sensors();
+  while(!gpioRead(BUTTON_GPIO)){
+    // do nothing
+  }
+  printf("waiting for 5 seconds\n");
+  sleep(5);
 
   // initialize the threads for each sensor
   // this is initialized as an array because SensorController.h has macros for

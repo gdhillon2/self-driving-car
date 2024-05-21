@@ -31,6 +31,7 @@ sensor_info *Init_Sensors() {
   gpioSetMode(FSONIC_SENSOR_TRIG, PI_OUTPUT);
   gpioSetMode(BSONIC_SENSOR_ECHO, PI_INPUT);
   gpioSetMode(BSONIC_SENSOR_TRIG, PI_OUTPUT);
+  gpioSetMode(BUTTON_GPIO, PI_INPUT);
 
   // initialize the structs used for the 6 sensors
   sensor_info *sensor_array = malloc(sizeof(sensor_info) * SENSOR_NUM);
